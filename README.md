@@ -1,4 +1,4 @@
-Title - Pick one rs
+Title - Sebright
 
 Project's Description
 
