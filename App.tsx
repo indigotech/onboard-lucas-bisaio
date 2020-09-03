@@ -12,19 +12,13 @@ import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   StatusBar,
+  TextInput,
+  Button,
+  Alert,
 } from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 declare const global: {HermesInternal: null | {}};
 
@@ -33,48 +27,54 @@ const App = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Text>Hello World</Text>
+        <View style={styles.title}>
+          <Text style={styles.text}>Bem vindo(a) à Taqtile!</Text>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.descriptionText}>E-mail</Text>
+            <TextInput style={styles.input}> </TextInput>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.descriptionText}> Senha</Text>
+            <TextInput style={styles.input}> </TextInput>
+          </View>
+          <Button onPress={() => Alert.alert('pressed')} title="Entrar" />
+        </View>
       </SafeAreaView>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+
+  container: {
+    alignItems: 'center',
+    padding: 30,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  title: {
+    backgroundColor: 'white',
+    paddingTop: 100,
   },
-  body: {
-    backgroundColor: Colors.white,
+  text: {
+    textAlign: 'center',
+    fontSize: 50,
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  inputContainer: {
+    padding: 10,
   },
-  sectionTitle: {
+  input: {
+    textAlign: 'center',
+    width: 350,
+    height: 70,
     fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+    borderWidth: 3,
+    borderRadius: 25,
+    borderColor: '#a6a6a6',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  descriptionText: {
+    fontSize: 20,
+    padding: 9,
   },
 });
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.onboardproject">
+  package="com.onboard">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
