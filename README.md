@@ -9,4 +9,4 @@ Environment and tools
 
 Steps to run and debug 
 - install dependencies: npx install
-- run app: npx react-native run-ios
+- npx react-native start and npx react-native run-ios

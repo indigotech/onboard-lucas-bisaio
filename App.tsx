@@ -47,6 +47,7 @@ const App = () => {
 };
 
 const styles = StyleSheet.create({
+
   container: {
     alignItems: 'center',
     padding: 30,
