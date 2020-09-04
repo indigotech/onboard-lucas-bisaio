@@ -1,27 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, TextInput, Button, Alert} from 'react-native';
-import {ApolloClient, InMemoryCache} from '@apollo/client';
-import {gql} from '@apollo/client';
-
-function loginAccess (email: string, password: string) {
-  const client = new ApolloClient({
-    uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
-    cache: new InMemoryCache(),
-  });
-  console.log(email, password);
-  client
-    .mutate({
-      mutation: gql`
-        mutation {
-          login(data: {email: "${email}", password: "${password}"}) {
-            token
-          }
-        }
-      `,
-    })
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error));
-}
+import {loginAccess} from './client';
 
 const App = () => {
   const [email, setEmail] = useState('');
@@ -33,13 +12,13 @@ const App = () => {
     } else if (!emailTest()) {
       Alert.alert('Incorrect email format');
     } else {
-      Alert.alert("it's all ok");
       loginAccess(email, password);
     }
   }
 
   function passwordTest() {
     const emailValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
+    // eslint-disable-next-line prettier/prettier
     return password.length >= 7 && emailValidation.test(password) ? true : false;
   }
   function emailTest() {
