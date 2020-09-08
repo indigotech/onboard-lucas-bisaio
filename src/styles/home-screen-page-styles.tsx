@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
   nameStyle: {
     textAlign: 'center',
     fontSize: 20,
-    paddingBottom: 10,
   },
   emailStyle: {
     textAlign: 'center',

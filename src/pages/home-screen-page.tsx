@@ -1,21 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Text, View, Button} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import Users from '../usersList';
-import styles from '../styles/homeScreenPageStyles';
+import styles from '../styles/home-screen-page-styles';
+import queryRequest from '../service/query-request';
 
 interface User {
   email: string;
   name: string;
-  __typename?: string;
+  __typename: string;
   id?: number;
   birthDate?: string;
   phone?: string;
   role?: string;
 }
 
-export default function HomeScreen() {
-  const users: User[] = Users;
+interface PageProps {
+  componentId: string;
+  rootTag: number;
+  users: object;
+}
+
+export default function HomeScreen(props: PageProps) {
+  let [page, setPage] = useState(1);
+  const [usersList, setUsersList] = useState(props.users.userList);
 
   function formatName(name: string) {
     return name.charAt(0).toUpperCase() + name.slice(1);
@@ -29,17 +36,34 @@ export default function HomeScreen() {
         <Text style={styles.emailStyle}>{`${user.birthDate}`}</Text>
         <Button color="#ff8000" title="Detail" onPress={() => {}} />
       </View>
-      //return <Text>{`name: ${user.name} email: ${user.email}`}</Text>;
     );
+  }
+
+  async function updateUsersList() {
+    if (page <= 10) {
+      const newUsersList = (await queryRequest(page)).data.users.nodes;
+      setUsersList([...usersList, ...newUsersList]);
+      setPage((page += 1));
+    }
   }
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={users}
+        data={usersList}
         renderItem={(user) => renderListOfUsers(user.item)}
         keyExtractor={(name, index) => index.toString()}
+        onEndReached={updateUsersList}
+        onEndReachedThreshold={0.6}
       />
     </View>
   );
 }
+
+HomeScreen.options = {
+  topBar: {
+    title: {
+      text: 'Users List',
+    },
+  },
+};

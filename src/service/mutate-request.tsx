@@ -30,7 +30,6 @@ export async function loginAccess(
   await storeData(result.data.login.token);
 }
 
-//salva o token
 const storeData = async (value: string) => {
   try {
     await AsyncStorage.setItem('@token', value);
@@ -38,15 +37,3 @@ const storeData = async (value: string) => {
     console.log('erro na hora de salvar o token: ' + e);
   }
 };
-
-// //pega o token
-// const getData = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('@token');
-//     if (value !== null) {
-//       return value;
-//     }
-//   } catch (e) {
-//     console.log('nao armazenou: ' + e);
-//   }
-// };

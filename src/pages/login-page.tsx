@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, {useState} from 'react';
 import {
   View,
@@ -10,19 +9,30 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {loginAccess} from '../service/client';
+import {loginAccess} from '../service/mutate-request';
 import {Navigation} from 'react-native-navigation';
-import styles from '../styles/loginPageStyles';
+import styles from '../styles/login-page-styles';
+import queryRequest from '../service/query-request';
 
 interface PageProps {
   componentId: string;
   rootTag: number;
 }
 
-const loginPage = (props: PageProps) => {
+interface User {
+  email: string;
+  name: string;
+  __typename?: string;
+  id?: number;
+  birthDate?: string;
+  phone?: string;
+  role?: string;
+}
+
+const LoginPage = (props: PageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [onloading, setLoading] = useState(false);
 
   function inputValue() {
     if (!passwordTest()) {
@@ -30,7 +40,7 @@ const loginPage = (props: PageProps) => {
     } else if (!emailTest()) {
       Alert.alert('Incorrect email format');
     } else {
-      onLoading();
+      handleLoading();
     }
   }
 
@@ -43,11 +53,13 @@ const loginPage = (props: PageProps) => {
     return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
   }
 
-  async function onLoading() {
+  async function handleLoading() {
     setLoading(true);
     try {
       await loginAccess(email, password);
-      nextPage();
+      const startPage = 0;
+      const userList = await queryRequest(startPage);
+      nextPage(userList.data.users.nodes);
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
     } finally {
@@ -55,10 +67,13 @@ const loginPage = (props: PageProps) => {
     }
   }
 
-  function nextPage() {
+  function nextPage(userList: User[]) {
     Navigation.push(props.componentId, {
       component: {
         name: 'HomePage',
+        passProps: {
+          users: {userList},
+        },
       },
     });
   }
@@ -67,7 +82,7 @@ const loginPage = (props: PageProps) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      {loading && (
+      {onloading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
           <Text style={styles.loadingText}>Carregando</Text>
@@ -95,4 +110,12 @@ const loginPage = (props: PageProps) => {
   );
 };
 
-export default loginPage;
+LoginPage.options = {
+  topBar: {
+    title: {
+      text: 'Login Page',
+    },
+  },
+};
+
+export default LoginPage;
