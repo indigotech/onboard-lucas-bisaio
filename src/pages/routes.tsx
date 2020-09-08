@@ -8,7 +8,8 @@ import HomeScreen from './homeScreenPage';
 
 export default function Route() {
   return (
-    <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: 'orange'}}}>
+    <Stack.Navigator
+      screenOptions={{headerStyle: {backgroundColor: '#ff8000'}}}>
       <Stack.Screen
         name="Login"
         component={LoginPage}

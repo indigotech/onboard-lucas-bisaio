@@ -8,6 +8,8 @@ import {
   Button,
   Alert,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {loginAccess} from '../service/client';
 import {useNavigation} from '@react-navigation/native';
@@ -16,16 +18,16 @@ const loginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
+  const {navigate} = useNavigation();
 
   async function onLoading() {
     setLoading(true);
     try {
-      const token = await loginAccess(email, password);
-      console.warn(token);
-      navigation.navigate('HomeScreen');
+      const result = await loginAccess(email, password);
+      const userInfo = result.result.data.login.user;
+      navigate('HomeScreen', {userInfo});
     } catch (e) {
-      Alert.alert('Algo deu errado ' + e);
+      Alert.alert('Something is wrong - ' + e);
     } finally {
       setLoading(false);
     }
@@ -42,17 +44,17 @@ const loginPage = () => {
   }
 
   function passwordTest() {
-    const emailValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-    return password.length >= 7 && emailValidation.test(password)
-      ? true
-      : false;
+    const passwordValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
+    return passwordValidation.test(password) ? true : false;
   }
   function emailTest() {
     return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
@@ -76,8 +78,8 @@ const loginPage = () => {
           {password}
         </TextInput>
       </View>
-      <Button onPress={inputValue} title="Entrar" />
-    </View>
+      <Button color="#ff8000" onPress={inputValue} title="Entrar" />
+    </KeyboardAvoidingView>
   );
 };
 
@@ -110,7 +112,6 @@ const styles = StyleSheet.create({
   },
   textLogin: {
     fontSize: 24,
-    paddingTop: 20,
   },
   inputLogin: {
     textAlign: 'center',

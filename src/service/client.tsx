@@ -12,14 +12,21 @@ export async function loginAccess(email: string, password: string) {
           mutation {
             login(data: {email: "${email}", password: "${password}"}) {
               token
+              user {
+                email
+                name
+                id
+                birthDate
+                phone
+                role
+              }
             }
           }
         `,
   });
-  console.log(result);
   await storeData(result.data.login.token);
   const token = await getData();
-  return token;
+  return {result, token};
 }
 
 //salva o token
