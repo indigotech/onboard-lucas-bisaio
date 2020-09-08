@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, {useState} from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   TextInput,
@@ -12,26 +11,18 @@ import {
   Platform,
 } from 'react-native';
 import {loginAccess} from '../service/client';
-import {useNavigation} from '@react-navigation/native';
+import {Navigation} from 'react-native-navigation';
+import styles from '../styles/loginPageStyles';
 
-const loginPage = () => {
+interface PageProps {
+  componentId: string;
+  rootTag: number;
+}
+
+const loginPage = (props: PageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const {navigate} = useNavigation();
-
-  async function onLoading() {
-    setLoading(true);
-    try {
-      const result = await loginAccess(email, password);
-      const userInfo = result.result.data.login.user;
-      navigate('HomeScreen', {userInfo});
-    } catch (e) {
-      Alert.alert('Something is wrong - ' + e);
-    } finally {
-      setLoading(false);
-    }
-  }
 
   function inputValue() {
     if (!passwordTest()) {
@@ -47,8 +38,29 @@ const loginPage = () => {
     const passwordValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
     return passwordValidation.test(password) ? true : false;
   }
+
   function emailTest() {
     return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
+  }
+
+  async function onLoading() {
+    setLoading(true);
+    try {
+      await loginAccess(email, password);
+      nextPage();
+    } catch (e) {
+      Alert.alert('Something is wrong - ' + e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function nextPage() {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'HomePage',
+      },
+    });
   }
 
   return (
@@ -82,46 +94,5 @@ const loginPage = () => {
     </KeyboardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  loading: {
-    zIndex: 2,
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#000000AA',
-    position: 'absolute',
-    top: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    color: '#FFF',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 50,
-    textAlign: 'center',
-    paddingBottom: 40,
-  },
-  viewLogin: {
-    alignItems: 'center',
-    marginHorizontal: 40,
-  },
-  textLogin: {
-    fontSize: 24,
-  },
-  inputLogin: {
-    textAlign: 'center',
-    fontSize: 20,
-    width: 340,
-    height: 50,
-    borderWidth: 5,
-    borderRadius: 25,
-    borderColor: '#CCCC',
-  },
-});
 
 export default loginPage;

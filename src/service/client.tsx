@@ -2,7 +2,10 @@ import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export async function loginAccess(email: string, password: string) {
+export async function loginAccess(
+  email: string,
+  password: string,
+): Promise<void> {
   const client = new ApolloClient({
     uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
     cache: new InMemoryCache(),
@@ -25,8 +28,6 @@ export async function loginAccess(email: string, password: string) {
         `,
   });
   await storeData(result.data.login.token);
-  const token = await getData();
-  return {result, token};
 }
 
 //salva o token
@@ -38,14 +39,14 @@ const storeData = async (value: string) => {
   }
 };
 
-//pega o token
-const getData = async () => {
-  try {
-    const value = await AsyncStorage.getItem('@token');
-    if (value !== null) {
-      return value;
-    }
-  } catch (e) {
-    console.log('nao armazenou: ' + e);
-  }
-};
+// //pega o token
+// const getData = async () => {
+//   try {
+//     const value = await AsyncStorage.getItem('@token');
+//     if (value !== null) {
+//       return value;
+//     }
+//   } catch (e) {
+//     console.log('nao armazenou: ' + e);
+//   }
+// };

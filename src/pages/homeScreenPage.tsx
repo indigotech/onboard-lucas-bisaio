@@ -1,7 +1,8 @@
 import React from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
+import {Text, View, Button} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import Users from '../usersList';
+import styles from '../styles/homeScreenPageStyles';
 
 interface User {
   email: string;
@@ -13,8 +14,7 @@ interface User {
   role?: string;
 }
 
-export default function HomeScreen({route}) {
-  const userInfo: User = route.params;
+export default function HomeScreen() {
   const users: User[] = Users;
 
   function formatName(name: string) {
@@ -33,45 +33,13 @@ export default function HomeScreen({route}) {
     );
   }
 
-  console.log(userInfo);
   return (
     <View style={styles.container}>
       <FlatList
         data={users}
         renderItem={(user) => renderListOfUsers(user.item)}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(name, index) => index.toString()}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#DDD',
-    padding: 12,
-  },
-  user: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#FFF',
-    width: 300,
-    height: 120,
-    margin: 12,
-    borderRadius: 20,
-    padding: 12,
-  },
-  nameStyle: {
-    textAlign: 'center',
-    fontSize: 20,
-    paddingBottom: 10,
-  },
-  emailStyle: {
-    textAlign: 'center',
-  },
-  button: {
-    color: 'orange',
-  },
-});
