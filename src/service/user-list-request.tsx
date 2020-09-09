@@ -21,7 +21,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export default async function queryRequest(page: number) {
+export default async function getUserList(page: number) {
   const result = await client.query({
     query: gql`
       query User {

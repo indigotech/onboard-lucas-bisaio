@@ -9,30 +9,19 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {requestLoginAccess} from '../service/mutate-request';
+import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
 import styles from '../styles/login-page-styles';
-import queryRequest from '../service/query-request';
 
-interface PageProps {
+export interface PageProps {
   componentId: string;
   rootTag: number;
-}
-
-interface User {
-  email: string;
-  name: string;
-  __typename?: string;
-  id?: number;
-  birthDate?: string;
-  phone?: string;
-  role?: string;
 }
 
 const LoginPage = (props: PageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [onloading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleSubmit() {
     if (!passwordTest()) {
@@ -57,9 +46,7 @@ const LoginPage = (props: PageProps) => {
     setLoading(true);
     try {
       await requestLoginAccess(email, password);
-      const initialPage = 0;
-      const userList = await queryRequest(initialPage);
-      goToHome(userList.data.users.nodes);
+      goToHome();
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
     } finally {
@@ -67,13 +54,10 @@ const LoginPage = (props: PageProps) => {
     }
   }
 
-  function goToHome(userList: User[]) {
+  function goToHome() {
     Navigation.push(props.componentId, {
       component: {
         name: 'HomePage',
-        passProps: {
-          users: {userList},
-        },
       },
     });
   }
@@ -82,10 +66,10 @@ const LoginPage = (props: PageProps) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      {onloading && (
+      {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
-          <Text style={styles.loadingText}>Carregando</Text>
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
       <Text style={styles.title}>Bem vindo(a) à Taqtile!</Text>
