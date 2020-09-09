@@ -9,7 +9,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {loginAccess} from '../service/mutate-request';
+import {requestLoginAccess} from '../service/mutate-request';
 import {Navigation} from 'react-native-navigation';
 import styles from '../styles/login-page-styles';
 import queryRequest from '../service/query-request';
@@ -34,13 +34,13 @@ const LoginPage = (props: PageProps) => {
   const [password, setPassword] = useState('');
   const [onloading, setLoading] = useState(false);
 
-  function inputValue() {
+  function handleSubmit() {
     if (!passwordTest()) {
       Alert.alert('Incorrect password format');
     } else if (!emailTest()) {
       Alert.alert('Incorrect email format');
     } else {
-      handleLoading();
+      handleLogin();
     }
   }
 
@@ -53,13 +53,13 @@ const LoginPage = (props: PageProps) => {
     return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
   }
 
-  async function handleLoading() {
+  async function handleLogin() {
     setLoading(true);
     try {
-      await loginAccess(email, password);
-      const startPage = 0;
-      const userList = await queryRequest(startPage);
-      nextPage(userList.data.users.nodes);
+      await requestLoginAccess(email, password);
+      const initialPage = 0;
+      const userList = await queryRequest(initialPage);
+      goToHome(userList.data.users.nodes);
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
     } finally {
@@ -67,7 +67,7 @@ const LoginPage = (props: PageProps) => {
     }
   }
 
-  function nextPage(userList: User[]) {
+  function goToHome(userList: User[]) {
     Navigation.push(props.componentId, {
       component: {
         name: 'HomePage',
@@ -105,7 +105,7 @@ const LoginPage = (props: PageProps) => {
           {password}
         </TextInput>
       </View>
-      <Button color="#ff8000" onPress={inputValue} title="Entrar" />
+      <Button color="#ff8000" onPress={handleSubmit} title="Entrar" />
     </KeyboardAvoidingView>
   );
 };

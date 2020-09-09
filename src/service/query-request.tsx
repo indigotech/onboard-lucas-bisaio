@@ -9,7 +9,6 @@ const httpLink = createHttpLink({
 
 const authLink = setContext(async (_, {headers}) => {
   const token = await AsyncStorage.getItem('@token');
-  console.log(token);
   return {
     headers: {
       ...headers,
@@ -31,6 +30,7 @@ export default async function queryRequest(page: number) {
             email
             name
             birthDate
+            id
           }
         }
       }

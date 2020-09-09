@@ -2,7 +2,7 @@ import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export async function loginAccess(
+export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
