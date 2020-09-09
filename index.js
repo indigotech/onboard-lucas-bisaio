@@ -53,6 +53,6 @@ Navigation.events().registerAppLaunchedListener(() => {
     },
   });
 
-  //Navigation.setRoot(loginPage);
-  Navigation.setRoot(addUserPage);
+  Navigation.setRoot(loginPage);
+  //Navigation.setRoot(addUserPage);
 });
