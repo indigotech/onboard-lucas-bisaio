@@ -2,11 +2,14 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#DDD',
+  },
+  flatList: {
+    height: '91%',
     width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#DDD',
     padding: 12,
   },
   user: {
@@ -26,7 +29,20 @@ export const styles = StyleSheet.create({
   emailStyle: {
     textAlign: 'center',
   },
-  button: {
-    color: 'orange',
+  touchbleOpacityContainer: {
+    alignItems: 'flex-end',
+    marginRight: 30,
+  },
+  touchbleOpacity: {
+    alignItems: 'center',
+    backgroundColor: 'orange',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  touchbleOpacityText: {
+    color: 'white',
+    fontSize: 30,
+    fontWeight: 'bold',
   },
 });

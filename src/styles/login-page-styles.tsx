@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 50,
+    fontSize: 51,
     textAlign: 'center',
     paddingBottom: 40,
   },

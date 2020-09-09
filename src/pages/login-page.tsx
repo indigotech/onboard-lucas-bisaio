@@ -72,7 +72,7 @@ const LoginPage = (props: PageProps) => {
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
-      <Text style={styles.title}>Bem vindo(a) à Taqtile!</Text>
+      <Text style={styles.title}>Welcome to Taqtile!</Text>
       <View style={styles.viewLogin}>
         <Text style={styles.textLogin}>E-mail</Text>
         <TextInput
