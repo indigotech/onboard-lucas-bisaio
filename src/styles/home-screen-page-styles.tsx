@@ -1,21 +1,9 @@
 import {StyleSheet} from 'react-native';
 
-const styles = StyleSheet.create({
-  loading: {
-    zIndex: 2,
+export const styles = StyleSheet.create({
+  container: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#000000AA',
-    position: 'absolute',
-    top: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    color: '#FFF',
-  },
-  container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DDD',
@@ -42,5 +30,3 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
 });
-
-export default styles;

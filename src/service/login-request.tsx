@@ -1,6 +1,15 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
+import {User} from './user-list-request';
+
+export interface mutateResultType<T> {
+  login: {
+    __typename: string;
+    token: string;
+    user: T;
+  };
+}
 
 const client = new ApolloClient({
   uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
@@ -11,7 +20,7 @@ export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
-  const result = await client.mutate({
+  const result = await client.mutate<mutateResultType<User>>({
     mutation: gql`
           mutation {
             login(data: {email: "${email}", password: "${password}"}) {

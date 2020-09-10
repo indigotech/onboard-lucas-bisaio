@@ -1,37 +1,24 @@
-import React, {useState, useEffect} from 'react';
-import {Text, View, Button, Alert, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Text, View, Button, Alert} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
-import styles from '../styles/home-screen-page-styles';
+import {styles} from '../styles/home-screen-page-styles';
 import getUserList from '../service/user-list-request';
-import {PageProps} from './login-page';
+import {User} from '../service/user-list-request';
 
-interface User {
-  email: string;
-  name: string;
-  __typename: string;
-  id: number;
-  birthDate: string;
-  phone: string;
-  role?: string;
-}
-
-export default function HomeScreen(props: PageProps) {
-  const [page, setPage] = useState(0);
-  const [usersList, setUsersList] = useState([]);
-  const [loading, setLoading] = useState(false);
+export default function HomeScreen() {
+  const offset = useRef(0);
+  const hasNextPage = useRef(true);
+  const [usersList, setUsersList] = useState<User[]>([]);
 
   useEffect(() => {
     updateUsersList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  function formatName(name: string) {
-    return name.charAt(0).toUpperCase() + name.slice(1);
-  }
 
   function renderUser(user: User) {
     return (
       <View style={styles.user}>
-        <Text style={styles.nameStyle}>{`${formatName(user.name)}`}</Text>
+        <Text style={styles.nameStyle}>{`${user.id} - ${user.name}`}</Text>
         <Text style={styles.emailStyle}>{`${user.email}`}</Text>
         <Text style={styles.emailStyle}>{`${user.birthDate}`}</Text>
         <Button color="#ff8000" title="Detail" onPress={() => {}} />
@@ -40,26 +27,21 @@ export default function HomeScreen(props: PageProps) {
   }
 
   async function updateUsersList(): Promise<void> {
-    setLoading(true);
     try {
-      const newUsersList = (await getUserList(page)).data.users.nodes;
-      setUsersList([...usersList, ...newUsersList]);
-      setPage(page + 10);
+      if (hasNextPage.current) {
+        const queryResult = (await getUserList(offset.current)).data;
+        const newUsersList = queryResult.users.nodes;
+        setUsersList([...usersList, ...newUsersList]);
+        offset.current += 10;
+        hasNextPage.current = queryResult.users.pageInfo.hasNextPage;
+      }
     } catch (e) {
       Alert.alert(e);
-    } finally {
-      setLoading(false);
     }
   }
 
   return (
     <View style={styles.container}>
-      {loading && (
-        <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#FFF" />
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      )}
       <FlatList
         data={usersList}
         renderItem={(user) => renderUser(user.item)}

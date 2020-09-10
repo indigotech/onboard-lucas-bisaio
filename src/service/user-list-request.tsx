@@ -3,6 +3,25 @@ import {gql} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 import AsyncStorage from '@react-native-community/async-storage';
 
+export interface queryResultType<T> {
+  users: {
+    nodes: T[];
+    pageInfo: {
+      hasNextPage: boolean;
+    };
+  };
+}
+
+export interface User {
+  email: string;
+  name: string;
+  __typename: string;
+  id: number;
+  birthDate: string;
+  phone: string;
+  role?: string;
+}
+
 const httpLink = createHttpLink({
   uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
 });
@@ -21,8 +40,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export default async function getUserList(page: number) {
-  const result = await client.query({
+export default function getUserList(page: number) {
+  return client.query<queryResultType<User>>({
     query: gql`
       query User {
         users(pageInfo: {offset: ${page}}) {
@@ -32,9 +51,11 @@ export default async function getUserList(page: number) {
             birthDate
             id
           }
+          pageInfo {
+            hasNextPage
+          }
         }
       }
     `,
   });
-  return result;
 }

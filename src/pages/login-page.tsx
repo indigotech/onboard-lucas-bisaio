@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
-import styles from '../styles/login-page-styles';
+import {styles} from '../styles/login-page-styles';
 
 export interface PageProps {
   componentId: string;
