@@ -1,16 +1,26 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
+import {User} from './user-list-request';
 
-export async function loginAccess(
+export interface mutateResultType<T> {
+  login: {
+    __typename: string;
+    token: string;
+    user: T;
+  };
+}
+
+const client = new ApolloClient({
+  uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
+  cache: new InMemoryCache(),
+});
+
+export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
-  const client = new ApolloClient({
-    uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
-    cache: new InMemoryCache(),
-  });
-  const result = await client.mutate({
+  const result = await client.mutate<mutateResultType<User>>({
     mutation: gql`
           mutation {
             login(data: {email: "${email}", password: "${password}"}) {
@@ -30,7 +40,6 @@ export async function loginAccess(
   await storeData(result.data.login.token);
 }
 
-//salva o token
 const storeData = async (value: string) => {
   try {
     await AsyncStorage.setItem('@token', value);
@@ -38,15 +47,3 @@ const storeData = async (value: string) => {
     console.log('erro na hora de salvar o token: ' + e);
   }
 };
-
-// //pega o token
-// const getData = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('@token');
-//     if (value !== null) {
-//       return value;
-//     }
-//   } catch (e) {
-//     console.log('nao armazenou: ' + e);
-//   }
-// };

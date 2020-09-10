@@ -1,8 +1,9 @@
 import {StyleSheet} from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#DDD',
@@ -21,7 +22,6 @@ const styles = StyleSheet.create({
   nameStyle: {
     textAlign: 'center',
     fontSize: 20,
-    paddingBottom: 10,
   },
   emailStyle: {
     textAlign: 'center',
@@ -30,5 +30,3 @@ const styles = StyleSheet.create({
     color: 'orange',
   },
 });
-
-export default styles;

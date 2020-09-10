@@ -1,6 +1,6 @@
 import {Navigation} from 'react-native-navigation';
-import LoginPage from './src/pages/loginPage';
-import HomePage from './src/pages/homeScreenPage';
+import LoginPage from './src/pages/login-page';
+import HomePage from './src/pages/home-screen-page';
 
 Navigation.registerComponent('LoginPage', () => LoginPage);
 Navigation.registerComponent('HomePage', () => HomePage);
@@ -16,22 +16,6 @@ const loginPage = {
           },
         },
       ],
-    },
-  },
-};
-
-LoginPage.options = {
-  topBar: {
-    title: {
-      text: 'Login Page',
-    },
-  },
-};
-
-HomePage.options = {
-  topBar: {
-    title: {
-      text: 'Users List',
     },
   },
 };

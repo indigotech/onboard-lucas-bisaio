@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, {useState} from 'react';
 import {
   View,
@@ -10,27 +9,27 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import {loginAccess} from '../service/client';
+import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
-import styles from '../styles/loginPageStyles';
+import {styles} from '../styles/login-page-styles';
 
-interface PageProps {
+export interface PageProps {
   componentId: string;
   rootTag: number;
 }
 
-const loginPage = (props: PageProps) => {
+const LoginPage = (props: PageProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  function inputValue() {
+  function handleSubmit() {
     if (!passwordTest()) {
       Alert.alert('Incorrect password format');
     } else if (!emailTest()) {
       Alert.alert('Incorrect email format');
     } else {
-      onLoading();
+      handleLogin();
     }
   }
 
@@ -43,11 +42,11 @@ const loginPage = (props: PageProps) => {
     return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
   }
 
-  async function onLoading() {
+  async function handleLogin() {
     setLoading(true);
     try {
-      await loginAccess(email, password);
-      nextPage();
+      await requestLoginAccess(email, password);
+      goToHome();
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
     } finally {
@@ -55,7 +54,7 @@ const loginPage = (props: PageProps) => {
     }
   }
 
-  function nextPage() {
+  function goToHome() {
     Navigation.push(props.componentId, {
       component: {
         name: 'HomePage',
@@ -70,7 +69,7 @@ const loginPage = (props: PageProps) => {
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
-          <Text style={styles.loadingText}>Carregando</Text>
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
       <Text style={styles.title}>Bem vindo(a) à Taqtile!</Text>
@@ -90,9 +89,17 @@ const loginPage = (props: PageProps) => {
           {password}
         </TextInput>
       </View>
-      <Button color="#ff8000" onPress={inputValue} title="Entrar" />
+      <Button color="#ff8000" onPress={handleSubmit} title="Entrar" />
     </KeyboardAvoidingView>
   );
 };
 
-export default loginPage;
+LoginPage.options = {
+  topBar: {
+    title: {
+      text: 'Login Page',
+    },
+  },
+};
+
+export default LoginPage;

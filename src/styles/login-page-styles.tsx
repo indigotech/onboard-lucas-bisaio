@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   loading: {
     zIndex: 2,
     width: '100%',
@@ -40,5 +40,3 @@ const styles = StyleSheet.create({
     borderColor: '#CCCC',
   },
 });
-
-export default styles;
