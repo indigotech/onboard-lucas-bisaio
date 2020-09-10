@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, Button, Alert, ActivityIndicator} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import styles from '../styles/home-screen-page-styles';
@@ -17,14 +17,12 @@ interface User {
 
 export default function HomeScreen(props: PageProps) {
   const [page, setPage] = useState(0);
-  const [usersList, setUsersList] = useState(getInitialUserList);
+  const [usersList, setUsersList] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  async function getInitialUserList() {
-    const initialUserList: User[] = (await getUserList(page)).data.users.nodes;
-    setUsersList(initialUserList);
-    setPage(page + 10);
-  }
+  useEffect(() => {
+    updateUsersList();
+  }, []);
 
   function formatName(name: string) {
     return name.charAt(0).toUpperCase() + name.slice(1);
@@ -67,7 +65,7 @@ export default function HomeScreen(props: PageProps) {
         renderItem={(user) => renderUser(user.item)}
         keyExtractor={(name: User) => name.id.toString()}
         onEndReached={updateUsersList}
-        onEndReachedThreshold={0.8}
+        onEndReachedThreshold={0.6}
       />
     </View>
   );
