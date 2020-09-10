@@ -1,47 +1,34 @@
-import React, {useState} from 'react';
-import {Text, View, TextInput, Alert} from 'react-native';
+import React, {useRef} from 'react';
+import {Text, View, TextInput} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
   validateName,
   validateBirthDate,
   validateEmail,
-  validateCpf,
   validatePhone,
 } from '../service/validate-input-user';
 import {User} from '../service/user-list-request';
 
 export function AddUser() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [phone, setPhone] = useState('(+55) 11 9');
-  const [cpf, setCPF] = useState('');
+  const name = useRef('');
+  const email = useRef('');
+  const birthDate = useRef('');
+  const phone = useRef('');
 
   function handleSubmit() {
-    if (!validateName(name)) {
-      Alert.alert(`Incorrect input. "${name}" is not a valid name. Try again.`);
-    } else if (!validateCpf(cpf)) {
-      Alert.alert(
-        `Incorrect input. CPF "${cpf}" is not valid. Try again without dots and hyphen.`,
-      );
-    } else if (!validateEmail(email)) {
-      Alert.alert(`Incorrect input. Email "${email}" is not valid. Try again.`);
-    } else if (!validatePhone) {
-      Alert.alert(
-        `Incorrect input. Phone "${phone}" is not valid. Try with hyphen.`,
-      );
-    } else if (!validateBirthDate(birthDate)) {
-      Alert.alert(
-        `Incorrect input. Birth date "${birthDate}" is not valid. Try again.`,
-      );
-    } else {
+    if (
+      validateName(name.current) &&
+      validateEmail(email.current) &&
+      validatePhone(phone.current) &&
+      validateBirthDate(birthDate.current)
+    ) {
+      console.warn('passou');
       const userInfos: User = {
-        email: email,
-        name: name,
-        birthDate: birthDate,
-        phone: phone,
-        cpf: cpf,
+        email: email.current,
+        name: name.current,
+        birthDate: birthDate.current,
+        phone: phone.current,
       };
     }
   }
@@ -55,33 +42,28 @@ export function AddUser() {
           <Text style={styles.text}>E-mail</Text>
           <Text style={styles.text}>Birth Date</Text>
           <Text style={styles.text}>Phone Number</Text>
-          <Text style={styles.text}>CPF</Text>
         </View>
         <View style={styles.textInputContainer}>
           <TextInput
             style={styles.textInput}
-            onChangeText={(text) => setName(text)}>
-            {name}
+            onChangeText={(text) => (name.current = text)}>
+            {name.current}
           </TextInput>
           <TextInput
             style={styles.textInput}
-            onChangeText={(text) => setEmail(text)}>
-            {email}
+            onChangeText={(text) => (email.current = text)}
+            autoCapitalize="none">
+            {email.current}
           </TextInput>
           <TextInput
             style={styles.textInput}
-            onChangeText={(text) => setBirthDate(text)}>
-            {birthDate}
+            onChangeText={(text) => (birthDate.current = text)}>
+            {birthDate.current}
           </TextInput>
           <TextInput
             style={styles.textInput}
-            onChangeText={(text) => setPhone(text)}>
-            {phone}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => setCPF(text)}>
-            {cpf}
+            onChangeText={(text) => (phone.current = text)}>
+            {phone.current}
           </TextInput>
         </View>
       </View>

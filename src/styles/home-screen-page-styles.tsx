@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   },
   touchbleOpacity: {
     alignItems: 'center',
-    backgroundColor: 'orange',
+    backgroundColor: '#ff8000',
     width: 40,
     height: 40,
     borderRadius: 20,
