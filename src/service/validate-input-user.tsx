@@ -22,8 +22,8 @@ export function validateEmail(email: string): boolean {
 }
 
 export function validatePhone(phone: string): boolean {
-  const phoneValidation = /[\+]\d{2}[\(]\d{2}[\)]\d{4}[\-]\d{4}/;
-  var error = `Incorrect input. Phone "${phone}" is not valid. The correct format is +99(99)9999-9999 Try again.`;
+  const phoneValidation = /[a-z]|[A-Z]\W|_/;
+  var error = `Incorrect input. Phone "${phone}" is not valid. The correct format is 99999999 Try again.`;
   if (phoneValidation.test(phone)) {
     return true;
   } else {
