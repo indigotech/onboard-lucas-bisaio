@@ -54,7 +54,8 @@ export function validateBirthDate(birthDate: string): boolean {
 
 export function validatePassword(password: string): boolean {
   const passwordValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-  const error = 'Typo no containe. Try again';
+  const error =
+    'Invalid input. Password is not valid. Password must to have at least one letters and one numbers. Try again';
   if (passwordValidation.test(password)) {
     return true;
   } else {

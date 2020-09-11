@@ -3,7 +3,7 @@ import {gql} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export interface queryResultType<T> {
+export interface QueryResultType<T> {
   users: {
     nodes: T[];
     pageInfo: {
@@ -15,14 +15,14 @@ export interface queryResultType<T> {
 export interface User {
   email: string;
   name: string;
-  __typename: string;
-  id: number;
-  birthDate: string;
+  __typename?: string;
+  id?: number;
+  birthDate?: string;
   phone: string;
   role?: string;
 }
 
-export interface newUser {
+export interface NewUser {
   name: string;
   email: string;
   password: string;
@@ -31,7 +31,7 @@ export interface newUser {
   role: string;
 }
 
-export interface createUser {
+export interface CreateUser {
   createUser: {
     id: number;
   };
@@ -72,7 +72,7 @@ export const queryUserList = gql`
 `;
 
 export const mutationCreateNewUser = gql`
-  mutation createUser($data: PageInputType!) {
+  mutation createUser($data: UserInputType!) {
     createUser(data: $data) {
       id
     }
@@ -80,14 +80,14 @@ export const mutationCreateNewUser = gql`
 `;
 
 export function getUserList(page: number) {
-  return client.query<queryResultType<User>>({
+  return client.query<QueryResultType<User>>({
     query: queryUserList,
     variables: {data: {offset: page}},
   });
 }
 
-export function createNewUser(data: newUser) {
-  return client.mutate<newUser>({
+export function createNewUser(data: NewUser) {
+  return client.mutate<NewUser>({
     mutation: mutationCreateNewUser,
     variables: {data: data},
   });

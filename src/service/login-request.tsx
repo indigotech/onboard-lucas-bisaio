@@ -3,9 +3,8 @@ import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
 import {User} from './user-list-request';
 
-export interface mutateResultType<T> {
+export interface MutateResultType<T> {
   login: {
-    __typename: string;
     token: string;
     user: T;
   };
@@ -36,7 +35,7 @@ export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
-  const result = await client.mutate<mutateResultType<User>>({
+  const result = await client.mutate<MutateResultType<User>>({
     mutation: mutate,
     variables: {data: {email, password}},
   });

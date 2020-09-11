@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput} from 'react-native';
+import {Text, View, TextInput, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -9,14 +9,24 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-import {newUser, createNewUser} from '../service/user-list-request';
+import {
+  NewUser,
+  mutationCreateNewUser,
+  User,
+} from '../service/user-list-request';
+import {useMutation} from '@apollo/client';
+import {Navigation} from 'react-native-navigation';
+import {PageProps} from './login-page';
 
-export function AddUser() {
+export function AddUser(props: PageProps) {
   const name = useRef('');
   const email = useRef('');
   const birthDate = useRef('');
   const phone = useRef('');
   const password = useRef('');
+  const [mutation, {loading}] = useMutation<NewUser, {data: User}>(
+    mutationCreateNewUser,
+  );
 
   function handleSubmit() {
     if (
@@ -26,7 +36,7 @@ export function AddUser() {
       validateBirthDate(birthDate.current) &&
       validatePhone(phone.current)
     ) {
-      const newUserInfos: newUser = {
+      const newUserInfos: NewUser = {
         email: email.current,
         name: name.current,
         birthDate: birthDate.current,
@@ -34,18 +44,21 @@ export function AddUser() {
         password: password.current,
         role: 'user',
       };
-      //console.log(newUserInfos);
       createNewUserRequest(newUserInfos);
     }
   }
 
-  async function createNewUserRequest(newUserInfos: newUser) {
+  async function createNewUserRequest(newUserInfos: NewUser) {
     try {
-      const result = await createNewUser(newUserInfos);
-      console.log(result);
+      await mutation({variables: {data: newUserInfos}});
+      backToUserListPage();
     } catch (e) {
-      console.log(JSON.stringify(e));
+      Alert.alert(e);
     }
+  }
+
+  function backToUserListPage() {
+    Navigation.pop(props.componentId);
   }
 
   return (
@@ -89,13 +102,20 @@ export function AddUser() {
           </TextInput>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          handleSubmit();
-        }}>
-        <Text style={styles.textButton}>Ok</Text>
-      </TouchableOpacity>
+      {loading && (
+        <View style={styles.button}>
+          <ActivityIndicator size="large" color="#FFF" />
+        </View>
+      )}
+      {!loading && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleSubmit();
+          }}>
+          <Text style={styles.textButton}>Ok</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
