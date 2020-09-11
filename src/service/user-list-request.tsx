@@ -22,6 +22,21 @@ export interface User {
   role?: string;
 }
 
+export interface newUser {
+  name: string;
+  email: string;
+  password: string;
+  birthDate: string;
+  phone: string;
+  role: string;
+}
+
+export interface createUser {
+  createUser: {
+    id: number;
+  };
+}
+
 const httpLink = createHttpLink({
   uri: 'https://tq-template-server-sample.herokuapp.com/graphql',
 });
@@ -40,22 +55,40 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export default function getUserList(page: number) {
-  return client.query<queryResultType<User>>({
-    query: gql`
-      query User {
-        users(pageInfo: {offset: ${page}}) {
-          nodes {
-            email
-            name
-            birthDate
-            id
-          }
-          pageInfo {
-            hasNextPage
-          }
-        }
+export const queryUserList = gql`
+  query UserList($data: PageInputType) {
+    users(pageInfo: $data) {
+      nodes {
+        email
+        name
+        birthDate
+        id
       }
-    `,
+      pageInfo {
+        hasNextPage
+      }
+    }
+  }
+`;
+
+export const mutationCreateNewUser = gql`
+  mutation createUser($data: PageInputType) {
+    createUser(data: $data) {
+      id
+    }
+  }
+`;
+
+export function getUserList(page: number) {
+  return client.query<queryResultType<User>>({
+    query: queryUserList,
+    variables: {data: {offset: page}},
+  });
+}
+
+export function createNewUser(data: newUser) {
+  return client.mutate<newUser>({
+    mutation: mutationCreateNewUser,
+    variables: {data: data},
   });
 }

@@ -16,26 +16,29 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+export const mutate = gql`
+  mutation Login($data: LoginInputType!) {
+    login(data: $data) {
+      token
+      user {
+        email
+        name
+        id
+        birthDate
+        phone
+        role
+      }
+    }
+  }
+`;
+
 export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
   const result = await client.mutate<mutateResultType<User>>({
-    mutation: gql`
-          mutation {
-            login(data: {email: "${email}", password: "${password}"}) {
-              token
-              user {
-                email
-                name
-                id
-                birthDate
-                phone
-                role
-              }
-            }
-          }
-        `,
+    mutation: mutate,
+    variables: {data: {email, password}},
   });
   await storeData(result.data.login.token);
 }

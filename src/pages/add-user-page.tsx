@@ -9,15 +9,7 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-
-export interface newUser {
-  name: string;
-  email: string;
-  password: string;
-  birthDate: string;
-  phone: string;
-  role: string;
-}
+import {newUser, createNewUser} from '../service/user-list-request';
 
 export function AddUser() {
   const name = useRef('');
@@ -42,6 +34,16 @@ export function AddUser() {
         password: password.current,
         role: 'user',
       };
+      createNewUserRequest(newUserInfos);
+    }
+  }
+
+  async function createNewUserRequest(newUserInfos: newUser) {
+    try {
+      const result = await createNewUser(newUserInfos);
+      console.log(result);
+    } catch (e) {
+      console.log(e);
     }
   }
 

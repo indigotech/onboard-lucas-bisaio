@@ -2,7 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {Text, View, Alert} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {styles} from '../styles/home-screen-page-styles';
-import getUserList, {User} from '../service/user-list-request';
+import {getUserList, User} from '../service/user-list-request';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
 
