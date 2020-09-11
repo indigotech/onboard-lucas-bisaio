@@ -34,6 +34,7 @@ export function AddUser() {
         password: password.current,
         role: 'user',
       };
+      //console.log(newUserInfos);
       createNewUserRequest(newUserInfos);
     }
   }
@@ -43,7 +44,7 @@ export function AddUser() {
       const result = await createNewUser(newUserInfos);
       console.log(result);
     } catch (e) {
-      console.log(e);
+      console.log(JSON.stringify(e));
     }
   }
 

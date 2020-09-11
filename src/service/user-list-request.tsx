@@ -50,7 +50,7 @@ const authLink = setContext(async (_, {headers}) => {
     },
   };
 });
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
@@ -72,7 +72,7 @@ export const queryUserList = gql`
 `;
 
 export const mutationCreateNewUser = gql`
-  mutation createUser($data: PageInputType) {
+  mutation createUser($data: PageInputType!) {
     createUser(data: $data) {
       id
     }
