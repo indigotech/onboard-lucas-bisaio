@@ -1,11 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Text, View, Button, Alert} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
+import React, {useState, useRef, useEffect} from 'react';
+import {Text, View, Alert} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {styles} from '../styles/home-screen-page-styles';
-import getUserList from '../service/user-list-request';
-import {User} from '../service/user-list-request';
+import getUserList, {User} from '../service/user-list-request';
+import {Navigation} from 'react-native-navigation';
+import {PageProps} from './login-page';
 
-export default function HomeScreen() {
+export default function HomeScreen(props: PageProps) {
   const offset = useRef(0);
   const hasNextPage = useRef(true);
   const [usersList, setUsersList] = useState<User[]>([]);
@@ -21,7 +22,6 @@ export default function HomeScreen() {
         <Text style={styles.nameStyle}>{`${user.id} - ${user.name}`}</Text>
         <Text style={styles.emailStyle}>{`${user.email}`}</Text>
         <Text style={styles.emailStyle}>{`${user.birthDate}`}</Text>
-        <Button color="#ff8000" title="Detail" onPress={() => {}} />
       </View>
     );
   }
@@ -40,15 +40,34 @@ export default function HomeScreen() {
     }
   }
 
+  function goToAddUserPage() {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'AddUser',
+      },
+    });
+  }
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={usersList}
-        renderItem={(user) => renderUser(user.item)}
-        keyExtractor={(name: User) => name.id.toString()}
-        onEndReached={updateUsersList}
-        onEndReachedThreshold={0.6}
-      />
+      <View style={styles.flatList}>
+        <FlatList
+          data={usersList}
+          renderItem={(user) => renderUser(user.item)}
+          keyExtractor={(name: User) => name.id.toString()}
+          onEndReached={updateUsersList}
+          onEndReachedThreshold={0.6}
+        />
+      </View>
+      <View style={styles.touchbleOpacityContainer}>
+        <TouchableOpacity
+          style={styles.touchbleOpacity}
+          onPress={() => {
+            goToAddUserPage();
+          }}>
+          <Text style={styles.touchbleOpacityText}>+</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

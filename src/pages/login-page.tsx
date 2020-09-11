@@ -12,6 +12,7 @@ import {
 import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
+import {validatePassword, validateEmail} from '../service/validate-input-user';
 
 export interface PageProps {
   componentId: string;
@@ -24,22 +25,9 @@ const LoginPage = (props: PageProps) => {
   const [loading, setLoading] = useState(false);
 
   function handleSubmit() {
-    if (!passwordTest()) {
-      Alert.alert('Incorrect password format');
-    } else if (!emailTest()) {
-      Alert.alert('Incorrect email format');
-    } else {
+    if (validatePassword(password) && validateEmail(email)) {
       handleLogin();
     }
-  }
-
-  function passwordTest() {
-    const passwordValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
-    return passwordValidation.test(password) ? true : false;
-  }
-
-  function emailTest() {
-    return email.indexOf('@') && email.indexOf('.com') !== -1 ? true : false;
   }
 
   async function handleLogin() {
@@ -72,7 +60,7 @@ const LoginPage = (props: PageProps) => {
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
-      <Text style={styles.title}>Bem vindo(a) à Taqtile!</Text>
+      <Text style={styles.title}>Welcome to Taqtile!</Text>
       <View style={styles.viewLogin}>
         <Text style={styles.textLogin}>E-mail</Text>
         <TextInput
