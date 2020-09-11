@@ -25,10 +25,10 @@ export function validatePhone(phone: string): boolean {
   const phoneValidation = /[a-z]|[A-Z]\W|_/;
   var error = `Incorrect input. Phone "${phone}" is not valid. The correct format is 99999999 Try again.`;
   if (phoneValidation.test(phone)) {
-    return true;
-  } else {
     Alert.alert(error);
     return false;
+  } else {
+    return true;
   }
 }
 
@@ -50,5 +50,17 @@ export function validateBirthDate(birthDate: string): boolean {
     } else {
       return true;
     }
+  }
+}
+
+export function validatePassword(password: string): boolean {
+  const passwordValidation = /(?=.{7,})(?=.*[0-9])(?=.*[a-z])|(?=.{7,})(?=.*[0-9])(?=.*[A-Z])/;
+  var error =
+    'Invalid input. Password is not valid. It have to containe letters and numbers. Try again';
+  if (passwordValidation.test(password)) {
+    return true;
+  } else {
+    Alert.alert(error);
+    return false;
   }
 }

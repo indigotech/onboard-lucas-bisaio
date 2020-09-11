@@ -7,28 +7,40 @@ import {
   validateBirthDate,
   validateEmail,
   validatePhone,
+  validatePassword,
 } from '../service/validate-input-user';
-import {User} from '../service/user-list-request';
+
+export interface newUser {
+  name: string;
+  email: string;
+  password: string;
+  birthDate: string;
+  phone: string;
+  role: string;
+}
 
 export function AddUser() {
   const name = useRef('');
   const email = useRef('');
   const birthDate = useRef('');
   const phone = useRef('');
+  const password = useRef('');
 
   function handleSubmit() {
     if (
       validateName(name.current) &&
       validateEmail(email.current) &&
-      validatePhone(phone.current) &&
-      validateBirthDate(birthDate.current)
+      validatePassword(password.current) &&
+      validateBirthDate(birthDate.current) &&
+      validatePhone(phone.current)
     ) {
-      console.warn('passou');
-      const userInfos: User = {
+      const newUserInfos: newUser = {
         email: email.current,
         name: name.current,
         birthDate: birthDate.current,
         phone: phone.current,
+        password: password.current,
+        role: 'user',
       };
     }
   }
@@ -40,6 +52,7 @@ export function AddUser() {
         <View style={styles.textContainer}>
           <Text style={styles.text}>Name</Text>
           <Text style={styles.text}>E-mail</Text>
+          <Text style={styles.text}>Password</Text>
           <Text style={styles.text}>Birth Date</Text>
           <Text style={styles.text}>Phone Number</Text>
         </View>
@@ -54,6 +67,12 @@ export function AddUser() {
             onChangeText={(text) => (email.current = text)}
             autoCapitalize="none">
             {email.current}
+          </TextInput>
+          <TextInput
+            style={styles.textInput}
+            secureTextEntry={true}
+            onChangeText={(text) => (password.current = text)}>
+            {password.current}
           </TextInput>
           <TextInput
             style={styles.textInput}
