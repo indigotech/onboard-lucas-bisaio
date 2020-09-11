@@ -85,10 +85,3 @@ export function getUserList(page: number) {
     variables: {data: {offset: page}},
   });
 }
-
-export function createNewUser(data: NewUser) {
-  return client.mutate<NewUser>({
-    mutation: mutationCreateNewUser,
-    variables: {data: data},
-  });
-}
