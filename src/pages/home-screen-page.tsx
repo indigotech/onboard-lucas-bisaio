@@ -12,6 +12,7 @@ export default function HomeScreen(props: PageProps) {
   const [usersList, setUsersList] = useState<User[]>([]);
 
   useEffect(() => {
+    console.log(usersList.length);
     updateUsersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

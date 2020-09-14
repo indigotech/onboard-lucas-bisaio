@@ -14,7 +14,7 @@ import {
   mutationCreateNewUser,
   User,
 } from '../service/user-list-request';
-import {useMutation} from '@apollo/client';
+import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
 
@@ -24,8 +24,13 @@ export function AddUser(props: PageProps) {
   const birthDate = useRef('');
   const phone = useRef('');
   const password = useRef('');
-  const [mutation, {loading}] = useMutation<NewUser, {data: User}>(
+  const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
+    {
+      onCompleted: (data: User) => backToUserListPage(),
+      onError: (error: ApolloError) =>
+        Alert.alert(JSON.stringify(error.message)),
+    },
   );
 
   function handleSubmit() {
@@ -36,7 +41,7 @@ export function AddUser(props: PageProps) {
       validateBirthDate(birthDate.current) &&
       validatePhone(phone.current)
     ) {
-      const newUserInfos: NewUser = {
+      const newUserInfo: NewUser = {
         email: email.current,
         name: name.current,
         birthDate: birthDate.current,
@@ -44,17 +49,12 @@ export function AddUser(props: PageProps) {
         password: password.current,
         role: 'user',
       };
-      createNewUserRequest(newUserInfos);
+      createNewUserRequest(newUserInfo);
     }
   }
 
-  async function createNewUserRequest(newUserInfos: NewUser) {
-    try {
-      await mutation({variables: {data: newUserInfos}});
-      backToUserListPage();
-    } catch (e) {
-      Alert.alert(e);
-    }
+  function createNewUserRequest(newUserInfos: NewUser) {
+    addUserRequest({variables: {data: newUserInfos}});
   }
 
   function backToUserListPage() {
