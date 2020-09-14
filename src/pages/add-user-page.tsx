@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput, Alert, ActivityIndicator} from 'react-native';
+import {Text, View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -9,6 +9,7 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
+import {InputNewUser} from '../styled-componentes/text-input-component';
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
@@ -69,33 +70,25 @@ export function AddUser(props: PageProps<void>) {
           <Text style={styles.text}>Phone Number</Text>
         </View>
         <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (name.current = text)}>
+          <InputNewUser onChangeText={(text) => (name.current = text)}>
             {name.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
+          </InputNewUser>
+          <InputNewUser
             onChangeText={(text) => (email.current = text)}
             autoCapitalize="none">
             {email.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
+          </InputNewUser>
+          <InputNewUser
             secureTextEntry={true}
             onChangeText={(text) => (password.current = text)}>
             {password.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (birthDate.current = text)}>
+          </InputNewUser>
+          <InputNewUser onChangeText={(text) => (birthDate.current = text)}>
             {birthDate.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (phone.current = text)}>
+          </InputNewUser>
+          <InputNewUser onChangeText={(text) => (phone.current = text)}>
             {phone.current}
-          </TextInput>
+          </InputNewUser>
         </View>
       </View>
       {loading && (
