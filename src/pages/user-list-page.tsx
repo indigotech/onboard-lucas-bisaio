@@ -5,9 +5,6 @@ import {styles} from '../styles/home-screen-page-styles';
 import {getUserList, User} from '../service/users-requests';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
-import {storeData} from '../service/storage-data';
-import {userId} from '../service/key-names';
-
 export default function HomeScreen(props: PageProps) {
   const offset = useRef(0);
   const hasNextPage = useRef(true);
@@ -33,14 +30,16 @@ export default function HomeScreen(props: PageProps) {
   }
 
   async function handleButton(id: string) {
-    await storeData(userId, id);
-    goToUserDetailsPage();
+    goToUserDetailsPage(id);
   }
 
-  function goToUserDetailsPage() {
+  function goToUserDetailsPage(id: string) {
     Navigation.push(props.componentId, {
       component: {
         name: 'UserDetails',
+        passProps: {
+          id,
+        },
       },
     });
   }

@@ -1,30 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Text, ActivityIndicator, Alert} from 'react-native';
 import {styles} from '../styles/user-details-page-styles';
 import {useQuery} from '@apollo/client';
 import {queryUserDetail, User} from '../service/users-requests';
-import {getData} from '../service/storage-data';
-import {userId} from '../service/key-names';
+import {PageProps} from './login-page';
 
-export const UserDatails = () => {
-  const [currentUserId, setUserId] = useState('');
+export const UserDetail = (props: PageProps) => {
+  const userId = props.id;
   const {loading, error, data} = useQuery<{user: User}>(queryUserDetail, {
-    variables: {data: currentUserId},
+    variables: {data: userId},
   });
-
-  useEffect(() => {
-    async function getUserId() {
-      const result = await getData(userId);
-      if (result != null) {
-        setUserId(result);
-      } else {
-        Alert.alert(
-          'This user is not on the system yet. Try again in a few minutes',
-        );
-      }
-    }
-    getUserId();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -41,7 +26,7 @@ export const UserDatails = () => {
           </View>
           <View style={styles.datails}>
             <Text style={styles.infos}>{`E-mail: ${data.user.email}`}</Text>
-            <Text style={styles.infos}>{`ID: ${currentUserId}`}</Text>
+            <Text style={styles.infos}>{`ID: ${userId}`}</Text>
             <Text style={styles.infos}>{`Phone: ${data.user.phone}`}</Text>
             <Text style={styles.infos}>
               {`Birth Date: ${data.user.birthDate}`}
@@ -59,7 +44,7 @@ export const UserDatails = () => {
   );
 };
 
-UserDatails.options = {
+UserDetail.options = {
   topBar: {
     title: {
       text: 'User Datails',

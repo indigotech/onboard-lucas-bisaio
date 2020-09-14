@@ -3,7 +3,7 @@ import {Navigation} from 'react-native-navigation';
 import LoginPage from './src/pages/login-page';
 import HomePage from './src/pages/user-list-page';
 import {AddUser} from './src/pages/add-user-page';
-import {UserDatails} from './src/pages/user-details-page';
+import {UserDetails} from './src/pages/user-details-page';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './src/service/users-requests';
 
@@ -22,10 +22,10 @@ Navigation.registerComponent(
   'UserDetails',
   () => (props) => (
     <ApolloProvider client={client}>
-      <UserDatails {...props} />
+      <UserDetails {...props} />
     </ApolloProvider>
   ),
-  () => UserDatails,
+  () => UserDetails,
 );
 
 const loginPage = {
