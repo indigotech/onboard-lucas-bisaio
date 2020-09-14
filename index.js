@@ -3,8 +3,9 @@ import {Navigation} from 'react-native-navigation';
 import LoginPage from './src/pages/login-page';
 import HomePage from './src/pages/home-screen-page';
 import {AddUser} from './src/pages/add-user-page';
+import {UserDatails} from './src/pages/user-details-page';
 import {ApolloProvider} from '@apollo/client';
-import {client} from './src/service/user-list-request';
+import {client} from './src/service/users-requests';
 
 Navigation.registerComponent('LoginPage', () => LoginPage);
 Navigation.registerComponent('HomePage', () => HomePage);
@@ -17,6 +18,15 @@ Navigation.registerComponent(
   ),
   () => AddUser,
 );
+Navigation.registerComponent(
+  'UserDetails',
+  () => (props) => (
+    <ApolloProvider client={client}>
+      <UserDatails {...props} />
+    </ApolloProvider>
+  ),
+  () => UserDatails,
+);
 
 const loginPage = {
   root: {
@@ -26,6 +36,21 @@ const loginPage = {
         {
           component: {
             name: 'LoginPage',
+          },
+        },
+      ],
+    },
+  },
+};
+
+const userDetails = {
+  root: {
+    stack: {
+      id: 'UserDetails',
+      children: [
+        {
+          component: {
+            name: 'UserDetails',
           },
         },
       ],
@@ -49,5 +74,5 @@ Navigation.events().registerAppLaunchedListener(() => {
     },
   });
 
-  Navigation.setRoot(loginPage);
+  Navigation.setRoot(userDetails);
 });

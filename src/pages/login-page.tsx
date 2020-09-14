@@ -17,6 +17,7 @@ import {validatePassword, validateEmail} from '../service/validate-input-user';
 export interface PageProps {
   componentId: string;
   rootTag: number;
+  data?: string;
 }
 
 const LoginPage = (props: PageProps) => {

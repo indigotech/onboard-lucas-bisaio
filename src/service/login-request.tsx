@@ -1,7 +1,7 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
-import {User} from './user-list-request';
+import {User} from './users-requests';
 
 export interface MutateResultType<T> {
   login: {
@@ -23,9 +23,6 @@ export const mutate = gql`
         email
         name
         id
-        birthDate
-        phone
-        role
       }
     }
   }

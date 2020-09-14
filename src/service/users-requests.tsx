@@ -71,6 +71,18 @@ export const queryUserList = gql`
   }
 `;
 
+export const queryUserDetail = gql`
+  query UserDetails($data: ID!) {
+    user(id: $data) {
+      name
+      email
+      birthDate
+      phone
+      role
+    }
+  }
+`;
+
 export const mutationCreateNewUser = gql`
   mutation createUser($data: UserInputType!) {
     createUser(data: $data) {
