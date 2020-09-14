@@ -23,16 +23,4 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 40,
   },
-  textLogin: {
-    fontSize: 24,
-  },
-  inputLogin: {
-    textAlign: 'center',
-    fontSize: 20,
-    width: 340,
-    height: 50,
-    borderWidth: 5,
-    borderRadius: 25,
-    borderColor: '#CCCC',
-  },
 });

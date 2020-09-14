@@ -1,16 +1,16 @@
-import style from 'styled-components/native';
+import styled from 'styled-components/native';
 
-export const Title = style.Text`
-    font-size: 40px;
-    font-weight: bold;
-    color: #000000;
-    margin-top: 20px;
-    margin-bottom: 20px;
+export const Title = styled.Text`
+  font-size: 40px;
+  font-weight: bold;
+  color: #000000;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
-export const Label = style.Text`
-    font-size: 12px;
-    font-weight: normal;
-    color: #777777;
-    margin-bottom: 12px;
+export const Label = styled.Text<{color: string}>`
+  font-size: 20px;
+  font-weight: normal;
+  color: ${(props) => `${props.color}`};
+  margin: 12px;
 `;

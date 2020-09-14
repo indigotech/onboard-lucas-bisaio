@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  Button,
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -12,8 +11,11 @@ import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
-import {Input} from '../styled-components/text-input-component';
-import {Title, Label} from '../styled-components/text-component';
+
+import {Input} from '../styled-componentes/text-input-component';
+import {Title, Label} from '../styled-componentes/text-component';
+import {Button} from '../styled-componentes/button-component';
+import {Caption} from '../styled-componentes/caption-component';
 
 export interface PageProps<T> {
   componentId: string;
@@ -23,11 +25,23 @@ export interface PageProps<T> {
 
 const LoginPage = (props: PageProps<void>) => {
   const [email, setEmail] = useState('');
+  const [emailCaption, setEmailCaption] = useState(false);
+  const [passwordCaption, setPasswordCaption] = useState(false);
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   function handleSubmit() {
-    if (validatePassword(password) && validateEmail(email)) {
+    if (!validatePassword(password)) {
+      setPasswordCaption(true);
+    } else {
+      setPasswordCaption(false);
+    }
+    if (!validateEmail(email)) {
+      setEmailCaption(true);
+    } else {
+      setEmailCaption(false);
+    }
+    if (validateEmail(email) && validatePassword(password)) {
       handleLogin();
     }
   }
@@ -64,16 +78,27 @@ const LoginPage = (props: PageProps<void>) => {
       )}
       <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Label>E-mail</Label>
-        <Input autoCapitalize="none" onChangeText={setEmail} />
-        <Label>Senha</Label>
+        <Label color={emailCaption ? '#F00' : '#777777'}>E-mail</Label>
         <Input
-          onChangeText={setPassword}
+          color={emailCaption ? '#F00' : '#777777'}
+          autoCapitalize="none"
+          onChangeText={(text) => setEmail(text)}
+        />
+        {emailCaption && <Caption>{`Email "${email}" is not valid.`}</Caption>}
+        <Label color={passwordCaption ? '#F00' : '#777777'}>Senha</Label>
+        <Input
+          color={passwordCaption ? '#F00' : '#777777'}
+          onChangeText={(text) => setPassword(text)}
           secureTextEntry={true}
           autoCapitalize="none"
         />
+        {passwordCaption && (
+          <Caption>
+            Password must to have at least one letter and one number
+          </Caption>
+        )}
       </View>
-      <Button color="#ff8000" onPress={handleSubmit} title="Entrar" />
+      <Button onPress={handleSubmit} title="Entrar" />
     </KeyboardAvoidingView>
   );
 };

@@ -1,7 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Text, View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import {
   validateName,
   validateBirthDate,
@@ -9,11 +10,14 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
+
 import {Input} from '../styled-components/text-input-component';
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
+import {Caption} from '../styled-componentes/caption-component';
+import {Label, Title} from '../styled-componentes/text-component';
 
 export function AddUser(props: PageProps<void>) {
   const name = useRef('');
@@ -21,6 +25,12 @@ export function AddUser(props: PageProps<void>) {
   const birthDate = useRef('');
   const phone = useRef('');
   const password = useRef('');
+  const [nameCaption, setNameCaption] = useState(false);
+  const [emailCaption, setEmailCaption] = useState(false);
+  const [passwordCaption, setPasswordCaption] = useState(false);
+  const [birthDateCaption, setBirthDateCaption] = useState(false);
+  const [phoneCaption, setPhoneCaption] = useState(false);
+
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
     {
@@ -31,6 +41,32 @@ export function AddUser(props: PageProps<void>) {
   );
 
   function handleSubmit() {
+    if (!validateName(name.current)) {
+      setNameCaption(true);
+    } else {
+      setNameCaption(false);
+    }
+    if (!validateEmail(email.current)) {
+      setEmailCaption(true);
+    } else {
+      setEmailCaption(false);
+    }
+    if (!validatePassword(password.current)) {
+      setPasswordCaption(true);
+    } else {
+      setPasswordCaption(false);
+    }
+    if (!validateBirthDate(birthDate.current)) {
+      setBirthDateCaption(true);
+    } else {
+      setBirthDateCaption(false);
+    }
+    if (!validatePhone(phone.current)) {
+      setPhoneCaption(true);
+    } else {
+      setPhoneCaption(false);
+    }
+
     if (
       validateName(name.current) &&
       validateEmail(email.current) &&
@@ -60,25 +96,54 @@ export function AddUser(props: PageProps<void>) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add a New User</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Name</Text>
-        <Input onChangeText={(text) => (name.current = text)} />
-        <Text style={styles.text}>E-mail</Text>
-        <Input
-          onChangeText={(text) => (email.current = text)}
-          autoCapitalize="none"
-        />
-        <Text style={styles.text}>Password</Text>
-        <Input
-          secureTextEntry={true}
-          onChangeText={(text) => (password.current = text)}
-        />
-        <Text style={styles.text}>Birth Date</Text>
-        <Input onChangeText={(text) => (birthDate.current = text)} />
-        <Text style={styles.text}>Phone Number</Text>
-        <Input onChangeText={(text) => (phone.current = text)} />
-      </View>
+      <Title>Add a New User</Title>
+
+      <Label color={nameCaption ? '#F00' : '#777777'}>Name</Label>
+      <Input
+        color={nameCaption ? '#F00' : '#777777'}
+        onChangeText={(text) => (name.current = text)}
+      />
+      {nameCaption && (
+        <Caption>{`"${name.current}" is not a valid name.`}</Caption>
+      )}
+      <Label color={emailCaption ? '#F00' : '#777777'}>E-mail</Label>
+      <Input
+        color={emailCaption ? '#F00' : '#777777'}
+        onChangeText={(text) => (email.current = text)}
+        autoCapitalize="none"
+      />
+      {emailCaption && (
+        <Caption>{`Email "${email.current}" is not valid.`}</Caption>
+      )}
+      <Label color={passwordCaption ? '#F00' : '#777777'}>Password</Label>
+      <Input
+        color={passwordCaption ? '#F00' : '#777777'}
+        secureTextEntry={true}
+        onChangeText={(text) => (password.current = text)}
+      />
+      {passwordCaption && (
+        <Caption>
+          Password have to contain at least one letter and one number.
+        </Caption>
+      )}
+      <Label color={birthDateCaption ? '#F00' : '#777777'}>Birth Date</Label>
+      <Input
+        color={birthDateCaption ? '#F00' : '#777777'}
+        onChangeText={(text) => (birthDate.current = text)}
+      />
+      {birthDateCaption && (
+        <Caption>
+          {'The correct format is YYYY-MM-DD. And have to be a past date.'}
+        </Caption>
+      )}
+      <Label color={phoneCaption ? '#F00' : '#777777'}>Phone Number</Label>
+      <Input
+        color={phoneCaption ? '#F00' : '#777777'}
+        onChangeText={(text) => (phone.current = text)}
+      />
+      {phoneCaption && (
+        <Caption>{`Phone "${phone.current}" is not valid. The correct format is 99999999`}</Caption>
+      )}
       {loading && (
         <View style={styles.button}>
           <ActivityIndicator size="large" color="#FFF" />
