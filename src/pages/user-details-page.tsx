@@ -1,17 +1,28 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, ActivityIndicator, Alert} from 'react-native';
 import {styles} from '../styles/user-details-page-styles';
-import {PageProps} from './login-page';
 import {useQuery} from '@apollo/client';
 import {queryUserDetail, User} from '../service/users-requests';
+import {getData} from '../service/storage-data';
+import {userId} from '../service/key-names';
 
-const fakeId = '75';
-
-export const UserDatails = (props: PageProps) => {
-  const userId = props.data !== undefined ? props.data : fakeId;
+export const UserDatails = () => {
+  const [currentUserId, setUserId] = useState('');
   const {loading, error, data} = useQuery<{user: User}>(queryUserDetail, {
-    variables: {data: userId},
+    variables: {data: currentUserId},
   });
+
+  useEffect(() => {
+    async function getUserId() {
+      const result = await getData(userId);
+      if (result != null) {
+        setUserId(result);
+      } else {
+        Alert.alert('There is no user on system');
+      }
+    }
+    getUserId();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -27,12 +38,13 @@ export const UserDatails = (props: PageProps) => {
             <Text style={styles.name}>{data.user.name}</Text>
           </View>
           <View style={styles.datails}>
-            <Text style={styles.name}>{`User E-mail: ${data.user.email}`}</Text>
-            <Text style={styles.name}>{`User ID: ${userId}`}</Text>
-            <Text style={styles.name}>{`User Phone: ${data.user.phone}`}</Text>
-            <Text style={styles.name}>
-              {`User Birth Date: ${data.user.birthDate}`}
+            <Text style={styles.infos}>{`E-mail: ${data.user.email}`}</Text>
+            <Text style={styles.infos}>{`ID: ${currentUserId}`}</Text>
+            <Text style={styles.infos}>{`Phone: ${data.user.phone}`}</Text>
+            <Text style={styles.infos}>
+              {`Birth Date: ${data.user.birthDate}`}
             </Text>
+            <Text style={styles.infos}>{`User type: ${data.user.role}`}</Text>
           </View>
         </>
       )}

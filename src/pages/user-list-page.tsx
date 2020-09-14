@@ -5,6 +5,8 @@ import {styles} from '../styles/home-screen-page-styles';
 import {getUserList, User} from '../service/users-requests';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
+import {storeData} from '../service/storage-data';
+import {userId} from '../service/key-names';
 
 export default function HomeScreen(props: PageProps) {
   const offset = useRef(0);
@@ -23,21 +25,24 @@ export default function HomeScreen(props: PageProps) {
         <Text style={styles.emailStyle}>{`${user.email}`}</Text>
         <Button
           title="Details"
-          onPress={() => {
-            console.warn(`Go to next page with id: ${user.id}`);
-            Navigation.push(props.componentId, {
-              component: {
-                name: 'UserDetails',
-                passProps: {
-                  data: user.id,
-                },
-              },
-            });
-          }}
+          onPress={() => handleButton(user.id.toString())}
           color="#ff8000"
         />
       </View>
     );
+  }
+
+  async function handleButton(id: string) {
+    await storeData(userId, id);
+    goToUserDetailsPage();
+  }
+
+  function goToUserDetailsPage() {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'UserDetails',
+      },
+    });
   }
 
   async function updateUsersList(): Promise<void> {

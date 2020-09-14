@@ -17,6 +17,11 @@ export const styles = StyleSheet.create({
     margin: 30,
     backgroundColor: '#FFF',
   },
+  infos: {
+    textAlign: 'center',
+    fontSize: 18,
+    padding: 10,
+  },
   loading: {
     zIndex: 2,
     width: '100%',

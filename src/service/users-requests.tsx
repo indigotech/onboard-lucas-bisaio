@@ -1,7 +1,8 @@
 import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
 import {setContext} from '@apollo/client/link/context';
-import AsyncStorage from '@react-native-community/async-storage';
+import {getData} from './storage-data';
+import {token} from './key-names';
 
 export interface QueryResultType<T> {
   users: {
@@ -42,11 +43,11 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext(async (_, {headers}) => {
-  const token = await AsyncStorage.getItem('@token');
+  const currentToken = await getData(token);
   return {
     headers: {
       ...headers,
-      Authorization: token ? `${token}` : '',
+      Authorization: currentToken ? `${currentToken}` : '',
     },
   };
 });

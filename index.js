@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import LoginPage from './src/pages/login-page';
-import HomePage from './src/pages/home-screen-page';
+import HomePage from './src/pages/user-list-page';
 import {AddUser} from './src/pages/add-user-page';
 import {UserDatails} from './src/pages/user-details-page';
 import {ApolloProvider} from '@apollo/client';
@@ -43,21 +43,6 @@ const loginPage = {
   },
 };
 
-const userDetails = {
-  root: {
-    stack: {
-      id: 'UserDetails',
-      children: [
-        {
-          component: {
-            name: 'UserDetails',
-          },
-        },
-      ],
-    },
-  },
-};
-
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({
     statusBar: {
@@ -74,5 +59,5 @@ Navigation.events().registerAppLaunchedListener(() => {
     },
   });
 
-  Navigation.setRoot(userDetails);
+  Navigation.setRoot(loginPage);
 });
