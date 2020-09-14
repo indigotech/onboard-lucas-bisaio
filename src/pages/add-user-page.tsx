@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput} from 'react-native';
+import {Text, View, TextInput, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -9,22 +9,29 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
+import {
+  NewUser,
+  mutationCreateNewUser,
+  User,
+} from '../service/user-list-request';
+import {ApolloError, useMutation} from '@apollo/client';
+import {Navigation} from 'react-native-navigation';
+import {PageProps} from './login-page';
 
-export interface newUser {
-  name: string;
-  email: string;
-  password: string;
-  birthDate: string;
-  phone: string;
-  role: string;
-}
-
-export function AddUser() {
+export function AddUser(props: PageProps) {
   const name = useRef('');
   const email = useRef('');
   const birthDate = useRef('');
   const phone = useRef('');
   const password = useRef('');
+  const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
+    mutationCreateNewUser,
+    {
+      onCompleted: (data: User) => backToUserListPage(),
+      onError: (error: ApolloError) =>
+        Alert.alert(JSON.stringify(error.message)),
+    },
+  );
 
   function handleSubmit() {
     if (
@@ -34,7 +41,7 @@ export function AddUser() {
       validateBirthDate(birthDate.current) &&
       validatePhone(phone.current)
     ) {
-      const newUserInfos: newUser = {
+      const newUserInfo: NewUser = {
         email: email.current,
         name: name.current,
         birthDate: birthDate.current,
@@ -42,7 +49,16 @@ export function AddUser() {
         password: password.current,
         role: 'user',
       };
+      createNewUserRequest(newUserInfo);
     }
+  }
+
+  function createNewUserRequest(newUserInfos: NewUser) {
+    addUserRequest({variables: {data: newUserInfos}});
+  }
+
+  function backToUserListPage() {
+    Navigation.pop(props.componentId);
   }
 
   return (
@@ -86,13 +102,20 @@ export function AddUser() {
           </TextInput>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          handleSubmit();
-        }}>
-        <Text style={styles.textButton}>Ok</Text>
-      </TouchableOpacity>
+      {loading && (
+        <View style={styles.button}>
+          <ActivityIndicator size="large" color="#FFF" />
+        </View>
+      )}
+      {!loading && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handleSubmit();
+          }}>
+          <Text style={styles.textButton}>Ok</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

@@ -3,9 +3,8 @@ import {gql} from '@apollo/client';
 import AsyncStorage from '@react-native-community/async-storage';
 import {User} from './user-list-request';
 
-export interface mutateResultType<T> {
+export interface MutateResultType<T> {
   login: {
-    __typename: string;
     token: string;
     user: T;
   };
@@ -16,26 +15,29 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+export const mutate = gql`
+  mutation Login($data: LoginInputType!) {
+    login(data: $data) {
+      token
+      user {
+        email
+        name
+        id
+        birthDate
+        phone
+        role
+      }
+    }
+  }
+`;
+
 export async function requestLoginAccess(
   email: string,
   password: string,
 ): Promise<void> {
-  const result = await client.mutate<mutateResultType<User>>({
-    mutation: gql`
-          mutation {
-            login(data: {email: "${email}", password: "${password}"}) {
-              token
-              user {
-                email
-                name
-                id
-                birthDate
-                phone
-                role
-              }
-            }
-          }
-        `,
+  const result = await client.mutate<MutateResultType<User>>({
+    mutation: mutate,
+    variables: {data: {email, password}},
   });
   await storeData(result.data.login.token);
 }
