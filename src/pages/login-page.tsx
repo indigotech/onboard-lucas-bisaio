@@ -13,6 +13,7 @@ import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
 import {Input} from '../styled-components/text-input-component';
+import {Title, Label} from '../styled-components/text-component';
 
 export interface PageProps<T> {
   componentId: string;
@@ -61,11 +62,11 @@ const LoginPage = (props: PageProps<void>) => {
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
-      <Text style={styles.title}>Welcome to Taqtile!</Text>
+      <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Text style={styles.textLogin}>E-mail</Text>
+        <Label>E-mail</Label>
         <Input autoCapitalize="none" onChangeText={setEmail} />
-        <Text style={styles.textLogin}>Senha</Text>
+        <Label>Senha</Label>
         <Input
           onChangeText={setPassword}
           secureTextEntry={true}
