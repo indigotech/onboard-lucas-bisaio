@@ -18,7 +18,9 @@ export const UserDatails = () => {
       if (result != null) {
         setUserId(result);
       } else {
-        Alert.alert('There is no user on system');
+        Alert.alert(
+          'This user is not on the system yet. Try again in a few minutes',
+        );
       }
     }
     getUserId();
@@ -44,7 +46,7 @@ export const UserDatails = () => {
             <Text style={styles.infos}>
               {`Birth Date: ${data.user.birthDate}`}
             </Text>
-            <Text style={styles.infos}>{`User type: ${data.user.role}`}</Text>
+            <Text style={styles.infos}>{`Role type: ${data.user.role}`}</Text>
           </View>
         </>
       )}
