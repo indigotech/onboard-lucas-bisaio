@@ -14,12 +14,13 @@ import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
 
-export interface PageProps {
+export interface PageProps<T> {
   componentId: string;
   rootTag: number;
+  param?: T;
 }
 
-const LoginPage = (props: PageProps) => {
+const LoginPage = (props: PageProps<void>) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -45,7 +46,7 @@ const LoginPage = (props: PageProps) => {
   function goToHome() {
     Navigation.push(props.componentId, {
       component: {
-        name: 'HomePage',
+        name: 'UserList',
       },
     });
   }

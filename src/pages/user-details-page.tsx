@@ -5,8 +5,8 @@ import {useQuery} from '@apollo/client';
 import {queryUserDetail, User} from '../service/users-requests';
 import {PageProps} from './login-page';
 
-export const UserDetail = (props: PageProps) => {
-  const userId = props.id;
+export function UserDetails<React, FC>(props: PageProps<string>) {
+  const userId = props.param;
   const {loading, error, data} = useQuery<{user: User}>(queryUserDetail, {
     variables: {data: userId},
   });
@@ -19,7 +19,7 @@ export const UserDetail = (props: PageProps) => {
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
-      {!loading && error === undefined && (
+      {!loading && !error && (
         <>
           <View style={styles.datails}>
             <Text style={styles.name}>{data.user.name}</Text>
@@ -42,12 +42,12 @@ export const UserDetail = (props: PageProps) => {
         })}
     </View>
   );
-};
+}
 
-UserDetail.options = {
+UserDetails.options = {
   topBar: {
     title: {
-      text: 'User Datails',
+      text: 'User Details',
     },
   },
 };

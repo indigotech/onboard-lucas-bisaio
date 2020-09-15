@@ -1,14 +1,14 @@
 import React from 'react';
 import {Navigation} from 'react-native-navigation';
 import LoginPage from './src/pages/login-page';
-import HomePage from './src/pages/user-list-page';
+import {UserList} from './src/pages/user-list-page';
 import {AddUser} from './src/pages/add-user-page';
 import {UserDetails} from './src/pages/user-details-page';
 import {ApolloProvider} from '@apollo/client';
 import {client} from './src/service/users-requests';
 
 Navigation.registerComponent('LoginPage', () => LoginPage);
-Navigation.registerComponent('HomePage', () => HomePage);
+Navigation.registerComponent('UserList', () => UserList);
 Navigation.registerComponent(
   'AddUser',
   () => (props) => (

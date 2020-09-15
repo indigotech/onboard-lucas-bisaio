@@ -5,7 +5,7 @@ import {styles} from '../styles/home-screen-page-styles';
 import {getUserList, User} from '../service/users-requests';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
-export default function HomeScreen(props: PageProps) {
+export function UserList<React, FC>(props: PageProps<void>) {
   const offset = useRef(0);
   const hasNextPage = useRef(true);
   const [usersList, setUsersList] = useState<User[]>([]);
@@ -22,15 +22,11 @@ export default function HomeScreen(props: PageProps) {
         <Text style={styles.emailStyle}>{`${user.email}`}</Text>
         <Button
           title="Details"
-          onPress={() => handleButton(user.id.toString())}
+          onPress={() => goToUserDetailsPage(user.id.toString())}
           color="#ff8000"
         />
       </View>
     );
-  }
-
-  async function handleButton(id: string) {
-    goToUserDetailsPage(id);
   }
 
   function goToUserDetailsPage(id: string) {
@@ -38,7 +34,7 @@ export default function HomeScreen(props: PageProps) {
       component: {
         name: 'UserDetails',
         passProps: {
-          id,
+          param: id,
         },
       },
     });
@@ -90,7 +86,7 @@ export default function HomeScreen(props: PageProps) {
   );
 }
 
-HomeScreen.options = {
+UserList.options = {
   topBar: {
     title: {
       text: 'Users List',

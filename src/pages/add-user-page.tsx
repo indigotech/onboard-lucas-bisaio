@@ -14,7 +14,7 @@ import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
 
-export function AddUser(props: PageProps) {
+export function AddUser(props: PageProps<void>) {
   const name = useRef('');
   const email = useRef('');
   const birthDate = useRef('');
