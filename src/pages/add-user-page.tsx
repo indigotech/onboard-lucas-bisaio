@@ -83,50 +83,52 @@ export function AddUser(props: PageProps<void>) {
       <View style={styles.container}>
         <Title>Add a New User</Title>
 
-        <Label color={caption.name ? '#F00' : '#2C0735'}>Name</Label>
+        <Label color={!caption.name ? '#F00' : '#2C0735'}>Name</Label>
         <Input
-          color={caption.name ? '#F00' : '#2C0735'}
+          color={!caption.name ? '#F00' : '#2C0735'}
           onChangeText={(text) => (name.current = text)}
         />
-        {caption.name && (
+        {!caption.name && (
           <Caption>{`"${name.current}" is not a valid name.`}</Caption>
         )}
-        <Label color={caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
+        <Label color={!caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
         <Input
-          color={caption.email ? '#F00' : '#2C0735'}
+          color={!caption.email ? '#F00' : '#2C0735'}
           onChangeText={(text) => (email.current = text)}
           autoCapitalize="none"
         />
-        {caption.email && (
+        {!caption.email && (
           <Caption>{`Email "${email.current}" is not valid.`}</Caption>
         )}
-        <Label color={caption.password ? '#F00' : '#2C0735'}>Password</Label>
+        <Label color={!caption.password ? '#F00' : '#2C0735'}>Password</Label>
         <Input
-          color={caption.password ? '#F00' : '#2C0735'}
+          color={!caption.password ? '#F00' : '#2C0735'}
           secureTextEntry={true}
           onChangeText={(text) => (password.current = text)}
         />
-        {caption.password && (
+        {!caption.password && (
           <Caption>
             Password have to contain at least one letter and one number.
           </Caption>
         )}
-        <Label color={caption.birthDate ? '#F00' : '#2C0735'}>Birth Date</Label>
+        <Label color={!caption.birthDate ? '#F00' : '#2C0735'}>
+          Birth Date
+        </Label>
         <Input
-          color={caption.birthDate ? '#F00' : '#2C0735'}
+          color={!caption.birthDate ? '#F00' : '#2C0735'}
           onChangeText={(text) => (birthDate.current = text)}
         />
-        {caption.birthDate && (
+        {!caption.birthDate && (
           <Caption>
             {'The correct format is YYYY-MM-DD. And have to be a past date.'}
           </Caption>
         )}
-        <Label color={caption.phone ? '#F00' : '#2C0735'}>Phone Number</Label>
+        <Label color={!caption.phone ? '#F00' : '#2C0735'}>Phone Number</Label>
         <Input
-          color={caption.phone ? '#F00' : '#2C0735'}
+          color={!caption.phone ? '#F00' : '#2C0735'}
           onChangeText={(text) => (phone.current = text)}
         />
-        {caption.phone && (
+        {!caption.phone && (
           <Caption>{`Phone "${phone.current}" is not valid. The correct format is 99999999`}</Caption>
         )}
         {loading && (
@@ -139,7 +141,7 @@ export function AddUser(props: PageProps<void>) {
             onPress={() => {
               handleSubmit();
             }}>
-            <Text style={styles.textButton}>Ok</Text>
+            <Label color={'#FFF'}>Ok</Label>
           </Button>
         )}
       </View>

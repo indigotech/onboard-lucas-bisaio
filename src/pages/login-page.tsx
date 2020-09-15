@@ -84,29 +84,29 @@ const LoginPage = (props: PageProps<void>) => {
       )}
       <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Label color={caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
+        <Label color={!caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
         <Input
-          color={caption.email ? '#F00' : '#2C0735'}
+          color={!caption.email ? '#F00' : '#2C0735'}
           autoCapitalize="none"
           onChangeText={(text) => (email.current = text)}
         />
-        {caption.email && (
+        {!caption.email && (
           <Caption>{`Email "${email.current}" is not valid.`}</Caption>
         )}
-        <Label color={caption.password ? '#F00' : '#2C0735'}>Senha</Label>
+        <Label color={!caption.password ? '#F00' : '#2C0735'}>Senha</Label>
         <Input
-          color={caption.password ? '#F00' : '#2C0735'}
+          color={!caption.password ? '#F00' : '#2C0735'}
           onChangeText={(text) => (password.current = text)}
           secureTextEntry={true}
           autoCapitalize="none"
         />
-        {caption.password && (
+        {!caption.password && (
           <Caption>
             Password must to have at least one letter and one number
           </Caption>
         )}
       </View>
-      <Button onPress={handleSubmit}>
+      <Button onPress={() => handleSubmit()}>
         <Label color={'#FFF'}>Ok</Label>
       </Button>
     </KeyboardAvoidingView>
