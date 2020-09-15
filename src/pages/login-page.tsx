@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  TextInput,
   Button,
   Alert,
   ActivityIndicator,
@@ -13,6 +12,7 @@ import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
+import {Input} from '../styled-components/text-input-component';
 
 export interface PageProps<T> {
   componentId: string;
@@ -64,19 +64,13 @@ const LoginPage = (props: PageProps<void>) => {
       <Text style={styles.title}>Welcome to Taqtile!</Text>
       <View style={styles.viewLogin}>
         <Text style={styles.textLogin}>E-mail</Text>
-        <TextInput
-          style={styles.inputLogin}
-          autoCapitalize="none"
-          onChangeText={(text) => setEmail(text)}>
-          {email}
-        </TextInput>
+        <Input autoCapitalize="none" onChangeText={setEmail} />
         <Text style={styles.textLogin}>Senha</Text>
-        <TextInput
-          style={styles.inputLogin}
+        <Input
+          onChangeText={setPassword}
           secureTextEntry={true}
-          onChangeText={(text) => setPassword(text)}>
-          {password}
-        </TextInput>
+          autoCapitalize="none"
+        />
       </View>
       <Button color="#ff8000" onPress={handleSubmit} title="Entrar" />
     </KeyboardAvoidingView>

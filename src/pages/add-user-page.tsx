@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import {Text, View, TextInput, Alert, ActivityIndicator} from 'react-native';
+import {Text, View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {
@@ -9,6 +9,7 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
+import {Input} from '../styled-components/text-input-component';
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
@@ -60,43 +61,23 @@ export function AddUser(props: PageProps<void>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add a New User</Text>
-      <View style={styles.infosContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Name</Text>
-          <Text style={styles.text}>E-mail</Text>
-          <Text style={styles.text}>Password</Text>
-          <Text style={styles.text}>Birth Date</Text>
-          <Text style={styles.text}>Phone Number</Text>
-        </View>
-        <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (name.current = text)}>
-            {name.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (email.current = text)}
-            autoCapitalize="none">
-            {email.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            secureTextEntry={true}
-            onChangeText={(text) => (password.current = text)}>
-            {password.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (birthDate.current = text)}>
-            {birthDate.current}
-          </TextInput>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={(text) => (phone.current = text)}>
-            {phone.current}
-          </TextInput>
-        </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Name</Text>
+        <Input onChangeText={(text) => (name.current = text)} />
+        <Text style={styles.text}>E-mail</Text>
+        <Input
+          onChangeText={(text) => (email.current = text)}
+          autoCapitalize="none"
+        />
+        <Text style={styles.text}>Password</Text>
+        <Input
+          secureTextEntry={true}
+          onChangeText={(text) => (password.current = text)}
+        />
+        <Text style={styles.text}>Birth Date</Text>
+        <Input onChangeText={(text) => (birthDate.current = text)} />
+        <Text style={styles.text}>Phone Number</Text>
+        <Input onChangeText={(text) => (phone.current = text)} />
       </View>
       {loading && (
         <View style={styles.button}>
