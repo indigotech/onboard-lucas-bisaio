@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     zIndex: 2,
     width: '100%',
     height: '100%',
-    backgroundColor: '#000000AA',
+    backgroundColor: '#00000077',
     position: 'absolute',
     top: 0,
     justifyContent: 'center',

@@ -46,11 +46,11 @@ const loginPage = {
 Navigation.events().registerAppLaunchedListener(() => {
   Navigation.setDefaultOptions({
     statusBar: {
-      backgroundColor: '#4e148c',
+      backgroundColor: '#FFF',
     },
     topBar: {
       title: {
-        color: '#fFF',
+        color: '#FFF',
       },
       backButton: {
         color: '#FFF',

@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
@@ -70,6 +71,7 @@ const LoginPage = (props: PageProps<void>) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
+      <StatusBar barStyle="light-content" />
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
