@@ -13,10 +13,10 @@ import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
 
-import {Input} from '../styled-componentes/text-input-component';
-import {Title, Label} from '../styled-componentes/text-component';
-import {Button} from '../styled-componentes/button-component';
-import {Caption} from '../styled-componentes/caption-component';
+import {Input} from '../styled-components/text-input-component';
+import {Title, Label} from '../styled-components/text-component';
+import {Button} from '../styled-components/button-component';
+import {Caption} from '../styled-components/caption-component';
 
 export interface PageProps<T> {
   componentId: string;
@@ -24,24 +24,28 @@ export interface PageProps<T> {
   param?: T;
 }
 
+export interface CaptionsErrors {
+  name?: boolean;
+  email?: boolean;
+  password?: boolean;
+  birthDate?: boolean;
+  phone?: boolean;
+}
+
 const LoginPage = (props: PageProps<void>) => {
   const email = useRef<string>('');
   const password = useRef<string>('');
-  const [emailCaption, setEmailCaption] = useState<boolean>(false);
-  const [passwordCaption, setPasswordCaption] = useState<boolean>(false);
+  const [caption, setCaption] = useState<CaptionsErrors>({
+    email: false,
+    password: false,
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
-    if (!validatePassword(password.current)) {
-      setPasswordCaption(true);
-    } else {
-      setPasswordCaption(false);
-    }
-    if (!validateEmail(email.current)) {
-      setEmailCaption(true);
-    } else {
-      setEmailCaption(false);
-    }
+    setCaption({
+      email: validateEmail(email.current),
+      password: validatePassword(password.current),
+    });
     if (validateEmail(email.current) && validatePassword(password.current)) {
       handleLogin();
     }
@@ -80,23 +84,23 @@ const LoginPage = (props: PageProps<void>) => {
       )}
       <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Label color={emailCaption ? '#F00' : '#2C0735'}>E-mail</Label>
+        <Label color={caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
         <Input
-          color={emailCaption ? '#F00' : '#2C0735'}
+          color={caption.email ? '#F00' : '#2C0735'}
           autoCapitalize="none"
           onChangeText={(text) => (email.current = text)}
         />
-        {emailCaption && (
+        {caption.email && (
           <Caption>{`Email "${email.current}" is not valid.`}</Caption>
         )}
-        <Label color={passwordCaption ? '#F00' : '#2C0735'}>Senha</Label>
+        <Label color={caption.password ? '#F00' : '#2C0735'}>Senha</Label>
         <Input
-          color={passwordCaption ? '#F00' : '#2C0735'}
+          color={caption.password ? '#F00' : '#2C0735'}
           onChangeText={(text) => (password.current = text)}
           secureTextEntry={true}
           autoCapitalize="none"
         />
-        {passwordCaption && (
+        {caption.password && (
           <Caption>
             Password must to have at least one letter and one number
           </Caption>
