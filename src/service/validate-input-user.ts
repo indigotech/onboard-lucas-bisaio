@@ -1,6 +1,6 @@
 export function validateName(name: string): boolean {
   const nameValidation = /[0-9]/;
-  return name.length !== 0 && !nameValidation.test(name);
+  return name && !nameValidation.test(name);
 }
 
 export function validateEmail(email: string): boolean {

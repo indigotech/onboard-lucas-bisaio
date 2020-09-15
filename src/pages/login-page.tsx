@@ -36,8 +36,8 @@ const LoginPage = (props: PageProps<void>) => {
   const email = useRef<string>('');
   const password = useRef<string>('');
   const [caption, setCaption] = useState<CaptionsErrors>({
-    email: false,
-    password: false,
+    email: true,
+    password: true,
   });
   const [loading, setLoading] = useState<boolean>(false);
 

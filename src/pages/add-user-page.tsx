@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Text, View, Alert, ActivityIndicator} from 'react-native';
+import {View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
 
 import {
@@ -27,11 +27,11 @@ export function AddUser(props: PageProps<void>) {
   const phone = useRef<string>('');
   const password = useRef<string>('');
   const [caption, setCaption] = useState<CaptionsErrors>({
-    name: false,
-    email: false,
-    password: false,
-    birthDate: false,
-    phone: false,
+    name: true,
+    email: true,
+    password: true,
+    birthDate: true,
+    phone: true,
   });
 
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
