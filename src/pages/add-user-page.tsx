@@ -1,7 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {Text, View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 import {
   validateName,
@@ -19,6 +18,7 @@ import {PageProps, CaptionsErrors} from './login-page';
 import {Input} from '../styled-components/text-input-component';
 import {Caption} from '../styled-components/caption-component';
 import {Label, Title} from '../styled-components/text-component';
+import {Button} from '../styled-components/button-component';
 
 export function AddUser(props: PageProps<void>) {
   const name = useRef<string>('');
@@ -135,13 +135,12 @@ export function AddUser(props: PageProps<void>) {
           </View>
         )}
         {!loading && (
-          <TouchableOpacity
-            style={styles.button}
+          <Button
             onPress={() => {
               handleSubmit();
             }}>
             <Text style={styles.textButton}>Ok</Text>
-          </TouchableOpacity>
+          </Button>
         )}
       </View>
     </View>
