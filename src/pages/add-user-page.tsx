@@ -63,29 +63,21 @@ export function AddUser(props: PageProps<void>) {
       <Text style={styles.title}>Add a New User</Text>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Name</Text>
-        <Input onChangeText={(text) => (name.current = text)}>
-          {name.current}
-        </Input>
+        <Input onChangeText={(text) => (name.current = text)} />
         <Text style={styles.text}>E-mail</Text>
         <Input
           onChangeText={(text) => (email.current = text)}
-          autoCapitalize="none">
-          {email.current}
-        </Input>
+          autoCapitalize="none"
+        />
         <Text style={styles.text}>Password</Text>
         <Input
           secureTextEntry={true}
-          onChangeText={(text) => (password.current = text)}>
-          {password.current}
-        </Input>
+          onChangeText={(text) => (password.current = text)}
+        />
         <Text style={styles.text}>Birth Date</Text>
-        <Input onChangeText={(text) => (birthDate.current = text)}>
-          {birthDate.current}
-        </Input>
+        <Input onChangeText={(text) => (birthDate.current = text)} />
         <Text style={styles.text}>Phone Number</Text>
-        <Input onChangeText={(text) => (phone.current = text)}>
-          {phone.current}
-        </Input>
+        <Input onChangeText={(text) => (phone.current = text)} />
       </View>
       {loading && (
         <View style={styles.button}>
