@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#DDD',
+    backgroundColor: '#858ae3',
   },
   flatList: {
     height: '91%',
@@ -25,9 +25,11 @@ export const styles = StyleSheet.create({
   nameStyle: {
     textAlign: 'center',
     fontSize: 20,
+    color: '#2C0735',
   },
   emailStyle: {
     textAlign: 'center',
+    color: '#2C0735',
   },
   touchbleOpacityContainer: {
     alignItems: 'flex-end',
@@ -35,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   touchbleOpacity: {
     alignItems: 'center',
-    backgroundColor: '#ff8000',
+    backgroundColor: '#4E148C',
     width: 40,
     height: 40,
     borderRadius: 20,

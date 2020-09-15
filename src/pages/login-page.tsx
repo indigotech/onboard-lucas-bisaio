@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -24,24 +24,24 @@ export interface PageProps<T> {
 }
 
 const LoginPage = (props: PageProps<void>) => {
-  const [email, setEmail] = useState('');
-  const [emailCaption, setEmailCaption] = useState(false);
-  const [passwordCaption, setPasswordCaption] = useState(false);
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const email = useRef<string>('');
+  const password = useRef<string>('');
+  const [emailCaption, setEmailCaption] = useState<boolean>(false);
+  const [passwordCaption, setPasswordCaption] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
-    if (!validatePassword(password)) {
+    if (!validatePassword(password.current)) {
       setPasswordCaption(true);
     } else {
       setPasswordCaption(false);
     }
-    if (!validateEmail(email)) {
+    if (!validateEmail(email.current)) {
       setEmailCaption(true);
     } else {
       setEmailCaption(false);
     }
-    if (validateEmail(email) && validatePassword(password)) {
+    if (validateEmail(email.current) && validatePassword(password.current)) {
       handleLogin();
     }
   }
@@ -49,7 +49,7 @@ const LoginPage = (props: PageProps<void>) => {
   async function handleLogin() {
     setLoading(true);
     try {
-      await requestLoginAccess(email, password);
+      await requestLoginAccess(email.current, password.current);
       goToHome();
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
@@ -78,17 +78,19 @@ const LoginPage = (props: PageProps<void>) => {
       )}
       <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Label color={emailCaption ? '#F00' : '#777777'}>E-mail</Label>
+        <Label color={emailCaption ? '#F00' : '#2C0735'}>E-mail</Label>
         <Input
-          color={emailCaption ? '#F00' : '#777777'}
+          color={emailCaption ? '#F00' : '#2C0735'}
           autoCapitalize="none"
-          onChangeText={(text) => setEmail(text)}
+          onChangeText={(text) => (email.current = text)}
         />
-        {emailCaption && <Caption>{`Email "${email}" is not valid.`}</Caption>}
-        <Label color={passwordCaption ? '#F00' : '#777777'}>Senha</Label>
+        {emailCaption && (
+          <Caption>{`Email "${email.current}" is not valid.`}</Caption>
+        )}
+        <Label color={passwordCaption ? '#F00' : '#2C0735'}>Senha</Label>
         <Input
-          color={passwordCaption ? '#F00' : '#777777'}
-          onChangeText={(text) => setPassword(text)}
+          color={passwordCaption ? '#F00' : '#2C0735'}
+          onChangeText={(text) => (password.current = text)}
           secureTextEntry={true}
           autoCapitalize="none"
         />
@@ -98,7 +100,9 @@ const LoginPage = (props: PageProps<void>) => {
           </Caption>
         )}
       </View>
-      <Button onPress={handleSubmit} title="Entrar" />
+      <Button onPress={handleSubmit}>
+        <Label color={'#FFF'}>Ok</Label>
+      </Button>
     </KeyboardAvoidingView>
   );
 };

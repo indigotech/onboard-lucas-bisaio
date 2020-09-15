@@ -1,16 +1,22 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#858AE3',
+  },
+  container: {
+    alignItems: 'center',
+    margin: 10,
+    backgroundColor: '#FFF',
+    borderRadius: 20,
   },
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '5%',
-    backgroundColor: '#ff8000',
+    margin: '5%',
+    backgroundColor: '#4E148C',
     width: 50,
     height: 50,
     borderRadius: 30,

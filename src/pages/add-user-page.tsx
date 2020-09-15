@@ -95,69 +95,71 @@ export function AddUser(props: PageProps<void>) {
   }
 
   return (
-    <View style={styles.container}>
-      <Title>Add a New User</Title>
+    <View style={styles.screen}>
+      <View style={styles.container}>
+        <Title>Add a New User</Title>
 
-      <Label color={nameCaption ? '#F00' : '#777777'}>Name</Label>
-      <Input
-        color={nameCaption ? '#F00' : '#777777'}
-        onChangeText={(text) => (name.current = text)}
-      />
-      {nameCaption && (
-        <Caption>{`"${name.current}" is not a valid name.`}</Caption>
-      )}
-      <Label color={emailCaption ? '#F00' : '#777777'}>E-mail</Label>
-      <Input
-        color={emailCaption ? '#F00' : '#777777'}
-        onChangeText={(text) => (email.current = text)}
-        autoCapitalize="none"
-      />
-      {emailCaption && (
-        <Caption>{`Email "${email.current}" is not valid.`}</Caption>
-      )}
-      <Label color={passwordCaption ? '#F00' : '#777777'}>Password</Label>
-      <Input
-        color={passwordCaption ? '#F00' : '#777777'}
-        secureTextEntry={true}
-        onChangeText={(text) => (password.current = text)}
-      />
-      {passwordCaption && (
-        <Caption>
-          Password have to contain at least one letter and one number.
-        </Caption>
-      )}
-      <Label color={birthDateCaption ? '#F00' : '#777777'}>Birth Date</Label>
-      <Input
-        color={birthDateCaption ? '#F00' : '#777777'}
-        onChangeText={(text) => (birthDate.current = text)}
-      />
-      {birthDateCaption && (
-        <Caption>
-          {'The correct format is YYYY-MM-DD. And have to be a past date.'}
-        </Caption>
-      )}
-      <Label color={phoneCaption ? '#F00' : '#777777'}>Phone Number</Label>
-      <Input
-        color={phoneCaption ? '#F00' : '#777777'}
-        onChangeText={(text) => (phone.current = text)}
-      />
-      {phoneCaption && (
-        <Caption>{`Phone "${phone.current}" is not valid. The correct format is 99999999`}</Caption>
-      )}
-      {loading && (
-        <View style={styles.button}>
-          <ActivityIndicator size="large" color="#FFF" />
-        </View>
-      )}
-      {!loading && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            handleSubmit();
-          }}>
-          <Text style={styles.textButton}>Ok</Text>
-        </TouchableOpacity>
-      )}
+        <Label color={nameCaption ? '#F00' : '#2C0735'}>Name</Label>
+        <Input
+          color={nameCaption ? '#F00' : '#2C0735'}
+          onChangeText={(text) => (name.current = text)}
+        />
+        {nameCaption && (
+          <Caption>{`"${name.current}" is not a valid name.`}</Caption>
+        )}
+        <Label color={emailCaption ? '#F00' : '#2C0735'}>E-mail</Label>
+        <Input
+          color={emailCaption ? '#F00' : '#2C0735'}
+          onChangeText={(text) => (email.current = text)}
+          autoCapitalize="none"
+        />
+        {emailCaption && (
+          <Caption>{`Email "${email.current}" is not valid.`}</Caption>
+        )}
+        <Label color={passwordCaption ? '#F00' : '#2C0735'}>Password</Label>
+        <Input
+          color={passwordCaption ? '#F00' : '#2C0735'}
+          secureTextEntry={true}
+          onChangeText={(text) => (password.current = text)}
+        />
+        {passwordCaption && (
+          <Caption>
+            Password have to contain at least one letter and one number.
+          </Caption>
+        )}
+        <Label color={birthDateCaption ? '#F00' : '#2C0735'}>Birth Date</Label>
+        <Input
+          color={birthDateCaption ? '#F00' : '#2C0735'}
+          onChangeText={(text) => (birthDate.current = text)}
+        />
+        {birthDateCaption && (
+          <Caption>
+            {'The correct format is YYYY-MM-DD. And have to be a past date.'}
+          </Caption>
+        )}
+        <Label color={phoneCaption ? '#F00' : '#2C0735'}>Phone Number</Label>
+        <Input
+          color={phoneCaption ? '#F00' : '#2C0735'}
+          onChangeText={(text) => (phone.current = text)}
+        />
+        {phoneCaption && (
+          <Caption>{`Phone "${phone.current}" is not valid. The correct format is 99999999`}</Caption>
+        )}
+        {loading && (
+          <View style={styles.button}>
+            <ActivityIndicator size="large" color="#FFF" />
+          </View>
+        )}
+        {!loading && (
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handleSubmit();
+            }}>
+            <Text style={styles.textButton}>Ok</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 }

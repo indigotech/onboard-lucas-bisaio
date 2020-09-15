@@ -36,7 +36,7 @@ export function UserDetails<React, FC>(props: PageProps<string>) {
         </>
       )}
       {!loading &&
-        error !== undefined &&
+        error &&
         Alert.alert(`${error.message}. Try again in a few minutes.`, '', [], {
           cancelable: false,
         })}
