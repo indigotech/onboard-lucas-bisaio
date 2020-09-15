@@ -1,7 +1,8 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {gql} from '@apollo/client';
-import AsyncStorage from '@react-native-community/async-storage';
-import {User} from './user-list-request';
+import {User} from './users-requests';
+import {storeData} from './storage-data';
+import {token} from './key-names';
 
 export interface MutateResultType<T> {
   login: {
@@ -23,9 +24,6 @@ export const mutate = gql`
         email
         name
         id
-        birthDate
-        phone
-        role
       }
     }
   }
@@ -39,13 +37,5 @@ export async function requestLoginAccess(
     mutation: mutate,
     variables: {data: {email, password}},
   });
-  await storeData(result.data.login.token);
+  await storeData(token, result.data.login.token);
 }
-
-const storeData = async (value: string) => {
-  try {
-    await AsyncStorage.setItem('@token', value);
-  } catch (e) {
-    console.log('erro na hora de salvar o token: ' + e);
-  }
-};

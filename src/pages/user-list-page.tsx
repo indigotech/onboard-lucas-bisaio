@@ -1,18 +1,16 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {Text, View, Alert} from 'react-native';
+import {Text, View, Alert, Button} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {styles} from '../styles/home-screen-page-styles';
-import {getUserList, User} from '../service/user-list-request';
+import {getUserList, User} from '../service/users-requests';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
-
-export default function HomeScreen(props: PageProps) {
+export function UserList<React, FC>(props: PageProps<void>) {
   const offset = useRef(0);
   const hasNextPage = useRef(true);
   const [usersList, setUsersList] = useState<User[]>([]);
 
   useEffect(() => {
-    console.log(usersList.length);
     updateUsersList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -20,11 +18,26 @@ export default function HomeScreen(props: PageProps) {
   function renderUser(user: User) {
     return (
       <View style={styles.user}>
-        <Text style={styles.nameStyle}>{`${user.id} - ${user.name}`}</Text>
+        <Text style={styles.nameStyle}>{`${user.name}`}</Text>
         <Text style={styles.emailStyle}>{`${user.email}`}</Text>
-        <Text style={styles.emailStyle}>{`${user.birthDate}`}</Text>
+        <Button
+          title="Details"
+          onPress={() => goToUserDetailsPage(user.id.toString())}
+          color="#ff8000"
+        />
       </View>
     );
+  }
+
+  function goToUserDetailsPage(id: string) {
+    Navigation.push(props.componentId, {
+      component: {
+        name: 'UserDetails',
+        passProps: {
+          param: id,
+        },
+      },
+    });
   }
 
   async function updateUsersList(): Promise<void> {
@@ -73,7 +86,7 @@ export default function HomeScreen(props: PageProps) {
   );
 }
 
-HomeScreen.options = {
+UserList.options = {
   topBar: {
     title: {
       text: 'Users List',

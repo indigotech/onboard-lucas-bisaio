@@ -9,16 +9,12 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-import {
-  NewUser,
-  mutationCreateNewUser,
-  User,
-} from '../service/user-list-request';
+import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
 
-export function AddUser(props: PageProps) {
+export function AddUser(props: PageProps<void>) {
   const name = useRef('');
   const email = useRef('');
   const birthDate = useRef('');
