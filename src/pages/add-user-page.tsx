@@ -9,7 +9,7 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-import {InputNewUser} from '../styled-componentes/text-input-component';
+import {Input} from '../styled-componentes/text-input-component';
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
@@ -61,35 +61,31 @@ export function AddUser(props: PageProps<void>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Add a New User</Text>
-      <View style={styles.infosContainer}>
-        <View style={styles.textContainer}>
-          <Text style={styles.text}>Name</Text>
-          <Text style={styles.text}>E-mail</Text>
-          <Text style={styles.text}>Password</Text>
-          <Text style={styles.text}>Birth Date</Text>
-          <Text style={styles.text}>Phone Number</Text>
-        </View>
-        <View style={styles.textInputContainer}>
-          <InputNewUser onChangeText={(text) => (name.current = text)}>
-            {name.current}
-          </InputNewUser>
-          <InputNewUser
-            onChangeText={(text) => (email.current = text)}
-            autoCapitalize="none">
-            {email.current}
-          </InputNewUser>
-          <InputNewUser
-            secureTextEntry={true}
-            onChangeText={(text) => (password.current = text)}>
-            {password.current}
-          </InputNewUser>
-          <InputNewUser onChangeText={(text) => (birthDate.current = text)}>
-            {birthDate.current}
-          </InputNewUser>
-          <InputNewUser onChangeText={(text) => (phone.current = text)}>
-            {phone.current}
-          </InputNewUser>
-        </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>Name</Text>
+        <Input onChangeText={(text) => (name.current = text)}>
+          {name.current}
+        </Input>
+        <Text style={styles.text}>E-mail</Text>
+        <Input
+          onChangeText={(text) => (email.current = text)}
+          autoCapitalize="none">
+          {email.current}
+        </Input>
+        <Text style={styles.text}>Password</Text>
+        <Input
+          secureTextEntry={true}
+          onChangeText={(text) => (password.current = text)}>
+          {password.current}
+        </Input>
+        <Text style={styles.text}>Birth Date</Text>
+        <Input onChangeText={(text) => (birthDate.current = text)}>
+          {birthDate.current}
+        </Input>
+        <Text style={styles.text}>Phone Number</Text>
+        <Input onChangeText={(text) => (phone.current = text)}>
+          {phone.current}
+        </Input>
       </View>
       {loading && (
         <View style={styles.button}>
