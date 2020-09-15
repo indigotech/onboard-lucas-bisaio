@@ -9,7 +9,7 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-import {Input} from '../styled-componentes/text-input-component';
+import {Input} from '../styled-components/text-input-component';
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
