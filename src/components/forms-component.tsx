@@ -1,34 +1,31 @@
 import React, {useState, useRef} from 'react';
-import {Input} from '../styled-components/text-input-component';
 import {
   Label,
   Caption,
   colorError,
   themeColor,
 } from '../styled-components/text-component';
+import {Input} from '../styled-components/text-input-component';
 
 interface FormParams {
   title: string;
-  message: string;
-  buttonClicked: number;
-  secureTextEntry?: boolean;
-  onChangeText: (text: string, error: boolean) => void;
+  onChangeText: (text: string) => string;
   validateField: (text: string) => boolean;
+  secureTextEntry?: boolean;
+  buttonClicked: number;
+  message: string;
 }
-export interface Inputs {
-  value: string;
-  valid: boolean;
+
+export function getValue(value: any) {
+  return value;
 }
 
 export const Forms: React.FC<FormParams> = (props) => {
-  const input = useRef('');
+  const [value, setValue] = useState('');
   const correctInput = useRef(true);
 
-  function handleSubmit(text: string) {
-    if (props.buttonClicked) {
-      correctInput.current = props.validateField(input.current);
-    }
-    props.onChangeText(text, correctInput.current);
+  if (props.buttonClicked) {
+    correctInput.current = props.validateField(value);
   }
 
   return (
@@ -38,7 +35,10 @@ export const Forms: React.FC<FormParams> = (props) => {
       </Label>
       <Input
         color={correctInput.current ? themeColor : colorError}
-        onChangeText={handleSubmit}
+        onChangeText={(text) => {
+          setValue(text);
+          props.onChangeText(text);
+        }}
         autoCapitalize="none"
         secureTextEntry={props.secureTextEntry || false}
       />
