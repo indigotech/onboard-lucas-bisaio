@@ -4,13 +4,16 @@ export const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#858AE3',
   },
   container: {
     alignItems: 'center',
+    width: '90%',
     margin: 10,
     backgroundColor: '#FFF',
     borderRadius: 20,
+    paddingBottom: 15,
   },
   button: {
     alignItems: 'center',
@@ -20,10 +23,5 @@ export const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 30,
-  },
-  textButton: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
   },
 });

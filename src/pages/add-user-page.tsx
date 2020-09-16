@@ -13,12 +13,19 @@ import {
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
-import {PageProps, CaptionsErrors} from './login-page';
+import {PageProps} from './login-page';
 
-import {Input} from '../styled-components/text-input-component';
-import {Caption} from '../styled-components/caption-component';
-import {Label, Title} from '../styled-components/text-component';
-import {Button} from '../styled-components/button-component';
+import {Title} from '../styled-components/text-component';
+import {ButtonConfirm} from '../components/button-component';
+import {Forms} from '../components/forms-component';
+
+export interface CaptionsErrors {
+  name?: boolean;
+  email?: boolean;
+  password?: boolean;
+  birthDate?: boolean;
+  phone?: boolean;
+}
 
 export function AddUser(props: PageProps<void>) {
   const name = useRef<string>('');
@@ -26,13 +33,7 @@ export function AddUser(props: PageProps<void>) {
   const birthDate = useRef<string>('');
   const phone = useRef<string>('');
   const password = useRef<string>('');
-  const [caption, setCaption] = useState<CaptionsErrors>({
-    name: true,
-    email: true,
-    password: true,
-    birthDate: true,
-    phone: true,
-  });
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
@@ -44,13 +45,7 @@ export function AddUser(props: PageProps<void>) {
   );
 
   function handleSubmit() {
-    setCaption({
-      name: validateName(name.current),
-      email: validateEmail(email.current),
-      password: validatePassword(password.current),
-      birthDate: validateBirthDate(birthDate.current),
-      phone: validatePhone(phone.current),
-    });
+    setButtonClicked(true);
     if (
       validateName(name.current) &&
       validateEmail(email.current) &&
@@ -68,6 +63,7 @@ export function AddUser(props: PageProps<void>) {
       };
       createNewUserRequest(newUserInfo);
     }
+    setButtonClicked(false);
   }
 
   function createNewUserRequest(newUserInfos: NewUser) {
@@ -82,69 +78,49 @@ export function AddUser(props: PageProps<void>) {
     <View style={styles.screen}>
       <View style={styles.container}>
         <Title>Add a New User</Title>
-
-        <Label color={!caption.name ? '#F00' : '#2C0735'}>Name</Label>
-        <Input
-          color={!caption.name ? '#F00' : '#2C0735'}
+        <Forms
+          title="Name"
           onChangeText={(text) => (name.current = text)}
+          validateField={validateName}
+          buttonClicked={buttonClicked}
+          message="Is not a valid Name"
         />
-        {!caption.name && (
-          <Caption>{`"${name.current}" is not a valid name.`}</Caption>
-        )}
-        <Label color={!caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
-        <Input
-          color={!caption.email ? '#F00' : '#2C0735'}
+        <Forms
+          title="E-mail"
           onChangeText={(text) => (email.current = text)}
-          autoCapitalize="none"
+          validateField={validateEmail}
+          buttonClicked={buttonClicked}
+          message="Is not a valid E-mail"
         />
-        {!caption.email && (
-          <Caption>{`Email "${email.current}" is not valid.`}</Caption>
-        )}
-        <Label color={!caption.password ? '#F00' : '#2C0735'}>Password</Label>
-        <Input
-          color={!caption.password ? '#F00' : '#2C0735'}
-          secureTextEntry={true}
+        <Forms
+          title="Password"
           onChangeText={(text) => (password.current = text)}
+          validateField={validatePassword}
+          secureTextEntry={true}
+          buttonClicked={buttonClicked}
+          message="Password have to contain at least one letter and one number."
         />
-        {!caption.password && (
-          <Caption>
-            Password have to contain at least one letter and one number.
-          </Caption>
-        )}
-        <Label color={!caption.birthDate ? '#F00' : '#2C0735'}>
-          Birth Date
-        </Label>
-        <Input
-          color={!caption.birthDate ? '#F00' : '#2C0735'}
+        <Forms
+          title="Birth Date"
           onChangeText={(text) => (birthDate.current = text)}
+          validateField={validateBirthDate}
+          buttonClicked={buttonClicked}
+          message="The correct format is YYYY-MM-DD. And have to be a past date."
         />
-        {!caption.birthDate && (
-          <Caption>
-            {'The correct format is YYYY-MM-DD. And have to be a past date.'}
-          </Caption>
-        )}
-        <Label color={!caption.phone ? '#F00' : '#2C0735'}>Phone Number</Label>
-        <Input
-          color={!caption.phone ? '#F00' : '#2C0735'}
+        <Forms
+          title="Phone Number"
           onChangeText={(text) => (phone.current = text)}
+          validateField={validatePhone}
+          buttonClicked={buttonClicked}
+          message="Phone is not valid. The correct format is 99999999"
         />
-        {!caption.phone && (
-          <Caption>{`Phone "${phone.current}" is not valid. The correct format is 99999999`}</Caption>
-        )}
-        {loading && (
-          <View style={styles.button}>
-            <ActivityIndicator size="large" color="#FFF" />
-          </View>
-        )}
-        {!loading && (
-          <Button
-            onPress={() => {
-              handleSubmit();
-            }}>
-            <Label color={'#FFF'}>Ok</Label>
-          </Button>
-        )}
       </View>
+      {loading && (
+        <View style={styles.button}>
+          <ActivityIndicator size="large" color="#FFF" />
+        </View>
+      )}
+      {!loading && <ButtonConfirm onPress={handleSubmit} title="Ok" />}
     </View>
   );
 }

@@ -13,10 +13,9 @@ import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
 
-import {Input} from '../styled-components/text-input-component';
-import {Title, Label} from '../styled-components/text-component';
-import {Button} from '../styled-components/button-component';
-import {Caption} from '../styled-components/caption-component';
+import {Title} from '../styled-components/text-component';
+import {ButtonConfirm} from '../components/button-component';
+import {Forms} from '../components/forms-component';
 
 export interface PageProps<T> {
   componentId: string;
@@ -24,28 +23,14 @@ export interface PageProps<T> {
   param?: T;
 }
 
-export interface CaptionsErrors {
-  name?: boolean;
-  email?: boolean;
-  password?: boolean;
-  birthDate?: boolean;
-  phone?: boolean;
-}
-
 const LoginPage = (props: PageProps<void>) => {
   const email = useRef<string>('');
   const password = useRef<string>('');
-  const [caption, setCaption] = useState<CaptionsErrors>({
-    email: true,
-    password: true,
-  });
+  const [buttonClicked, setButtonClicked] = useState(0);
   const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
-    setCaption({
-      email: validateEmail(email.current),
-      password: validatePassword(password.current),
-    });
+    setButtonClicked(buttonClicked + 1);
     if (validateEmail(email.current) && validatePassword(password.current)) {
       handleLogin();
     }
@@ -84,31 +69,23 @@ const LoginPage = (props: PageProps<void>) => {
       )}
       <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Label color={!caption.email ? '#F00' : '#2C0735'}>E-mail</Label>
-        <Input
-          color={!caption.email ? '#F00' : '#2C0735'}
-          autoCapitalize="none"
+        <Forms
+          title="Email"
           onChangeText={(text) => (email.current = text)}
+          validateField={validateEmail}
+          buttonClicked={buttonClicked}
+          message="Email not valid"
         />
-        {!caption.email && (
-          <Caption>{`Email "${email.current}" is not valid.`}</Caption>
-        )}
-        <Label color={!caption.password ? '#F00' : '#2C0735'}>Senha</Label>
-        <Input
-          color={!caption.password ? '#F00' : '#2C0735'}
+        <Forms
+          title="Password"
           onChangeText={(text) => (password.current = text)}
           secureTextEntry={true}
-          autoCapitalize="none"
+          validateField={validatePassword}
+          buttonClicked={buttonClicked}
+          message="Password must to have at least one letter and one number"
         />
-        {!caption.password && (
-          <Caption>
-            Password must to have at least one letter and one number
-          </Caption>
-        )}
       </View>
-      <Button onPress={() => handleSubmit()}>
-        <Label color={'#FFF'}>Ok</Label>
-      </Button>
+      <ButtonConfirm onPress={handleSubmit} title="Ok" />
     </KeyboardAvoidingView>
   );
 };
