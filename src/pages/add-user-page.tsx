@@ -33,7 +33,7 @@ export function AddUser(props: PageProps<void>) {
   const birthDate = useRef<string>('');
   const phone = useRef<string>('');
   const password = useRef<string>('');
-  const [buttonClicked, setButtonClicked] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(0);
 
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
@@ -45,7 +45,7 @@ export function AddUser(props: PageProps<void>) {
   );
 
   function handleSubmit() {
-    setButtonClicked(true);
+    setButtonClicked(buttonClicked + 1);
     if (
       validateName(name.current) &&
       validateEmail(email.current) &&
@@ -63,7 +63,6 @@ export function AddUser(props: PageProps<void>) {
       };
       createNewUserRequest(newUserInfo);
     }
-    setButtonClicked(false);
   }
 
   function createNewUserRequest(newUserInfos: NewUser) {
@@ -114,13 +113,13 @@ export function AddUser(props: PageProps<void>) {
           buttonClicked={buttonClicked}
           message="Phone is not valid. The correct format is 99999999"
         />
+        {loading && (
+          <View style={styles.button}>
+            <ActivityIndicator size="large" color="#FFF" />
+          </View>
+        )}
+        {!loading && <ButtonConfirm onPress={handleSubmit} title="Ok" />}
       </View>
-      {loading && (
-        <View style={styles.button}>
-          <ActivityIndicator size="large" color="#FFF" />
-        </View>
-      )}
-      {!loading && <ButtonConfirm onPress={handleSubmit} title="Ok" />}
     </View>
   );
 }
