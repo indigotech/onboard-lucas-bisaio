@@ -19,21 +19,13 @@ import {Title} from '../styled-components/text-component';
 import {ButtonConfirm} from '../components/button-component';
 import {Forms} from '../components/forms-component';
 
-export interface CaptionsErrors {
-  name?: boolean;
-  email?: boolean;
-  password?: boolean;
-  birthDate?: boolean;
-  phone?: boolean;
-}
-
 export function AddUser(props: PageProps<void>) {
   const name = useRef<string>('');
   const email = useRef<string>('');
   const birthDate = useRef<string>('');
   const phone = useRef<string>('');
   const password = useRef<string>('');
-  const [buttonClicked, setButtonClicked] = useState(0);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
@@ -45,7 +37,7 @@ export function AddUser(props: PageProps<void>) {
   );
 
   function handleSubmit() {
-    setButtonClicked(buttonClicked + 1);
+    setButtonClicked(true);
     if (
       validateName(name.current) &&
       validateEmail(email.current) &&
@@ -81,14 +73,14 @@ export function AddUser(props: PageProps<void>) {
           title="Name"
           onChangeText={(text) => (name.current = text)}
           validateField={validateName}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Is not a valid Name"
         />
         <Forms
           title="E-mail"
           onChangeText={(text) => (email.current = text)}
           validateField={validateEmail}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Is not a valid E-mail"
         />
         <Forms
@@ -96,21 +88,21 @@ export function AddUser(props: PageProps<void>) {
           onChangeText={(text) => (password.current = text)}
           validateField={validatePassword}
           secureTextEntry={true}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Password have to contain at least one letter and one number."
         />
         <Forms
           title="Birth Date"
           onChangeText={(text) => (birthDate.current = text)}
           validateField={validateBirthDate}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="The correct format is YYYY-MM-DD. And have to be a past date."
         />
         <Forms
           title="Phone Number"
           onChangeText={(text) => (phone.current = text)}
           validateField={validatePhone}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Phone is not valid. The correct format is 99999999"
         />
         {loading && (

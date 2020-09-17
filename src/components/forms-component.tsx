@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Label,
   Caption,
@@ -7,34 +7,34 @@ import {
 } from '../styled-components/text-component';
 import {Input} from '../styled-components/text-input-component';
 
-interface FormParams {
+interface FormProps {
   title: string;
   onChangeText: (text: string) => string;
   validateField: (text: string) => boolean;
   secureTextEntry?: boolean;
-  buttonClicked: number;
+  readyToValidate: boolean;
   message: string;
 }
 
-export function getValue(value: any) {
-  return value;
-}
-
-export const Forms: React.FC<FormParams> = (props) => {
+export const Forms: React.FC<FormProps> = (props) => {
   const [value, setValue] = useState('');
-  const correctInput = useRef(true);
+  const [correctInput, setCorrectInput] = useState(true);
 
-  if (props.buttonClicked) {
-    correctInput.current = props.validateField(value);
-  }
+  useEffect(() => {
+    if (props.readyToValidate) {
+      setCorrectInput(props.validateField(value));
+      console.log(value, correctInput, props.validateField(value));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, props.readyToValidate]);
 
   return (
     <>
-      <Label color={correctInput.current ? themeColor : colorError}>
+      <Label color={correctInput ? themeColor : colorError}>
         {props.title}
       </Label>
       <Input
-        color={correctInput.current ? themeColor : colorError}
+        color={correctInput ? themeColor : colorError}
         onChangeText={(text) => {
           setValue(text);
           props.onChangeText(text);
@@ -42,7 +42,7 @@ export const Forms: React.FC<FormParams> = (props) => {
         autoCapitalize="none"
         secureTextEntry={props.secureTextEntry || false}
       />
-      {!correctInput.current && <Caption>{props.message}</Caption>}
+      {!correctInput && <Caption>{props.message}</Caption>}
     </>
   );
 };

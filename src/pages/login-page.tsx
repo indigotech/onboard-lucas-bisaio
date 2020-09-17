@@ -26,12 +26,11 @@ export interface PageProps<T> {
 const LoginPage = (props: PageProps<void>) => {
   const email = useRef<string>('');
   const password = useRef<string>('');
-  const [buttonClicked, setButtonClicked] = useState(0);
-  const [validation, setValidation] = useState(0);
+  const [buttonClicked, setButtonClicked] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
-    setButtonClicked(buttonClicked + 1);
+    setButtonClicked(true);
     if (validateEmail(email.current) && validatePassword(password.current)) {
       handleLogin();
     }
@@ -74,7 +73,7 @@ const LoginPage = (props: PageProps<void>) => {
           title="Email"
           onChangeText={(text) => (email.current = text)}
           validateField={validateEmail}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Email not valid"
         />
         <Forms
@@ -82,7 +81,7 @@ const LoginPage = (props: PageProps<void>) => {
           onChangeText={(text) => (password.current = text)}
           secureTextEntry={true}
           validateField={validatePassword}
-          buttonClicked={buttonClicked}
+          readyToValidate={buttonClicked}
           message="Password must to have at least one letter and one number"
         />
       </View>
