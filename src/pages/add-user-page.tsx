@@ -1,7 +1,7 @@
-import React, {useRef} from 'react';
-import {Text, View, Alert, ActivityIndicator} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {View, Alert, ActivityIndicator} from 'react-native';
 import {styles} from '../styles/add-user-page-styles';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+
 import {
   validateName,
   validateBirthDate,
@@ -9,18 +9,25 @@ import {
   validatePhone,
   validatePassword,
 } from '../service/validate-input-user';
-import {Input} from '../styled-components/text-input-component';
+
 import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
+import {InputState} from './login-page';
+
+import {Title} from '../styled-components/text-component';
+import {ButtonConfirm} from '../components/button-component';
+import {Forms} from '../components/forms-component';
 
 export function AddUser(props: PageProps<void>) {
-  const name = useRef('');
-  const email = useRef('');
-  const birthDate = useRef('');
-  const phone = useRef('');
-  const password = useRef('');
+  const name = useRef<InputState>({text: '', isValid: false});
+  const email = useRef<InputState>({text: '', isValid: false});
+  const birthDate = useRef<InputState>({text: '', isValid: false});
+  const phone = useRef<InputState>({text: '', isValid: false});
+  const password = useRef<InputState>({text: '', isValid: false});
+  const [buttonClicked, setButtonClicked] = useState(false);
+
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
     mutationCreateNewUser,
     {
@@ -31,19 +38,20 @@ export function AddUser(props: PageProps<void>) {
   );
 
   function handleSubmit() {
+    setButtonClicked(true);
     if (
-      validateName(name.current) &&
-      validateEmail(email.current) &&
-      validatePassword(password.current) &&
-      validateBirthDate(birthDate.current) &&
-      validatePhone(phone.current)
+      name.current.isValid &&
+      email.current.isValid &&
+      password.current.isValid &&
+      birthDate.current.isValid &&
+      phone.current.isValid
     ) {
       const newUserInfo: NewUser = {
-        email: email.current,
-        name: name.current,
-        birthDate: birthDate.current,
-        phone: phone.current,
-        password: password.current,
+        email: email.current.text,
+        name: name.current.text,
+        birthDate: birthDate.current.text,
+        phone: phone.current.text,
+        password: password.current.text,
         role: 'user',
       };
       createNewUserRequest(newUserInfo);
@@ -59,40 +67,52 @@ export function AddUser(props: PageProps<void>) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add a New User</Text>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}>Name</Text>
-        <Input onChangeText={(text) => (name.current = text)} />
-        <Text style={styles.text}>E-mail</Text>
-        <Input
-          onChangeText={(text) => (email.current = text)}
-          autoCapitalize="none"
+    <View style={styles.screen}>
+      <View style={styles.container}>
+        <Title>Add a New User</Title>
+        <Forms
+          title="Name"
+          handleChangeText={(value) => (name.current = value)}
+          validateField={validateName}
+          readyToValidate={buttonClicked}
+          message="Is not a valid Name"
         />
-        <Text style={styles.text}>Password</Text>
-        <Input
+        <Forms
+          title="E-mail"
+          handleChangeText={(value) => (email.current = value)}
+          validateField={validateEmail}
+          readyToValidate={buttonClicked}
+          message="Is not a valid E-mail"
+        />
+        <Forms
+          title="Password"
+          handleChangeText={(value) => (password.current = value)}
+          validateField={validatePassword}
           secureTextEntry={true}
-          onChangeText={(text) => (password.current = text)}
+          readyToValidate={buttonClicked}
+          message="Password have to contain at least one letter and one number."
         />
-        <Text style={styles.text}>Birth Date</Text>
-        <Input onChangeText={(text) => (birthDate.current = text)} />
-        <Text style={styles.text}>Phone Number</Text>
-        <Input onChangeText={(text) => (phone.current = text)} />
+        <Forms
+          title="Birth Date"
+          handleChangeText={(value) => (birthDate.current = value)}
+          validateField={validateBirthDate}
+          readyToValidate={buttonClicked}
+          message="The correct format is YYYY-MM-DD. And have to be a past date."
+        />
+        <Forms
+          title="Phone Number"
+          handleChangeText={(value) => (phone.current = value)}
+          validateField={validatePhone}
+          readyToValidate={buttonClicked}
+          message="Phone is not valid. The correct format is 99999999"
+        />
+        {loading && (
+          <View style={styles.button}>
+            <ActivityIndicator size="large" color="#FFF" />
+          </View>
+        )}
+        {!loading && <ButtonConfirm onPress={handleSubmit} title="Ok" />}
       </View>
-      {loading && (
-        <View style={styles.button}>
-          <ActivityIndicator size="large" color="#FFF" />
-        </View>
-      )}
-      {!loading && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            handleSubmit();
-          }}>
-          <Text style={styles.textButton}>Ok</Text>
-        </TouchableOpacity>
-      )}
     </View>
   );
 }

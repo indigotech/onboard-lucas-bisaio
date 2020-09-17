@@ -1,32 +1,41 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {
   View,
   Text,
-  Button,
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {requestLoginAccess} from '../service/login-request';
 import {Navigation} from 'react-native-navigation';
 import {styles} from '../styles/login-page-styles';
 import {validatePassword, validateEmail} from '../service/validate-input-user';
-import {Input} from '../styled-components/text-input-component';
+
+import {Title} from '../styled-components/text-component';
+import {ButtonConfirm} from '../components/button-component';
+import {Forms} from '../components/forms-component';
 
 export interface PageProps<T> {
   componentId: string;
   rootTag: number;
   param?: T;
 }
+export interface InputState {
+  text: string;
+  isValid: boolean;
+}
 
 const LoginPage = (props: PageProps<void>) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const email = useRef<InputState>({text: '', isValid: false});
+  const password = useRef<InputState>({text: '', isValid: false});
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
-    if (validatePassword(password) && validateEmail(email)) {
+    setButtonClicked(true);
+    if (email.current.isValid && password.current.isValid) {
       handleLogin();
     }
   }
@@ -34,7 +43,7 @@ const LoginPage = (props: PageProps<void>) => {
   async function handleLogin() {
     setLoading(true);
     try {
-      await requestLoginAccess(email, password);
+      await requestLoginAccess(email.current.text, password.current.text);
       goToHome();
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
@@ -55,24 +64,32 @@ const LoginPage = (props: PageProps<void>) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
+      <StatusBar barStyle="light-content" />
       {loading && (
         <View style={styles.loading}>
           <ActivityIndicator size="large" color="#FFF" />
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       )}
-      <Text style={styles.title}>Welcome to Taqtile!</Text>
+      <Title>Welcome to Taqtile!</Title>
       <View style={styles.viewLogin}>
-        <Text style={styles.textLogin}>E-mail</Text>
-        <Input autoCapitalize="none" onChangeText={setEmail} />
-        <Text style={styles.textLogin}>Senha</Text>
-        <Input
-          onChangeText={setPassword}
+        <Forms
+          title="Email"
+          handleChangeText={(value: InputState) => (email.current = value)}
+          validateField={validateEmail}
+          readyToValidate={buttonClicked}
+          message="Email not valid"
+        />
+        <Forms
+          title="Password"
+          handleChangeText={(value: InputState) => (password.current = value)}
           secureTextEntry={true}
-          autoCapitalize="none"
+          validateField={validatePassword}
+          readyToValidate={buttonClicked}
+          message="Password must to have at least one letter and one number"
         />
       </View>
-      <Button color="#ff8000" onPress={handleSubmit} title="Entrar" />
+      <ButtonConfirm onPress={handleSubmit} title="Ok" />
     </KeyboardAvoidingView>
   );
 };

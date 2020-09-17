@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import {Text, View, Alert, Button} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
-import {styles} from '../styles/home-screen-page-styles';
+import {styles} from '../styles/user-list-page-styles';
 import {getUserList, User} from '../service/users-requests';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
@@ -23,7 +23,7 @@ export function UserList<React, FC>(props: PageProps<void>) {
         <Button
           title="Details"
           onPress={() => goToUserDetailsPage(user.id.toString())}
-          color="#ff8000"
+          color="#2C0735"
         />
       </View>
     );

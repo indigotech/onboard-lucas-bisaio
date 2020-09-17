@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
     zIndex: 2,
     width: '100%',
     height: '100%',
-    backgroundColor: '#000000AA',
+    backgroundColor: '#00000077',
     position: 'absolute',
     top: 0,
     justifyContent: 'center',
@@ -17,26 +17,10 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-  },
-  title: {
-    fontSize: 51,
-    textAlign: 'center',
-    paddingBottom: 40,
+    alignItems: 'center',
   },
   viewLogin: {
     alignItems: 'center',
     marginHorizontal: 40,
-  },
-  textLogin: {
-    fontSize: 24,
-  },
-  inputLogin: {
-    textAlign: 'center',
-    fontSize: 20,
-    width: 340,
-    height: 50,
-    borderWidth: 5,
-    borderRadius: 25,
-    borderColor: '#CCCC',
   },
 });
