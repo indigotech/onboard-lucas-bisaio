@@ -12,7 +12,7 @@ interface FormProps<T> {
   title: string;
   message: string;
   readyToValidate: boolean;
-  onChangeText: (value: T) => T;
+  handleChangeText: (value: T) => T;
   validateField: (text: string) => boolean;
   secureTextEntry?: boolean;
 }
@@ -33,7 +33,7 @@ export const Forms: React.FC<FormProps<InputState>> = (props) => {
     if (readyToValidate) {
       setCorrectInput(validateField(value.current));
     }
-    props.onChangeText({
+    props.handleChangeText({
       text: value.current,
       isValid: validateField(value.current),
     });
@@ -46,9 +46,7 @@ export const Forms: React.FC<FormProps<InputState>> = (props) => {
       </Label>
       <Input
         color={correctInput ? themeColor : colorError}
-        onChangeText={(text) => {
-          handleSubmit(text);
-        }}
+        onChangeText={handleSubmit}
         autoCapitalize="none"
         secureTextEntry={props.secureTextEntry || false}
       />

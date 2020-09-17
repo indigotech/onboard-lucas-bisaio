@@ -75,14 +75,14 @@ const LoginPage = (props: PageProps<void>) => {
       <View style={styles.viewLogin}>
         <Forms
           title="Email"
-          onChangeText={(value: InputState) => (email.current = value)}
+          handleChangeText={(value: InputState) => (email.current = value)}
           validateField={validateEmail}
           readyToValidate={buttonClicked}
           message="Email not valid"
         />
         <Forms
           title="Password"
-          onChangeText={(value: InputState) => (password.current = value)}
+          handleChangeText={(value: InputState) => (password.current = value)}
           secureTextEntry={true}
           validateField={validatePassword}
           readyToValidate={buttonClicked}

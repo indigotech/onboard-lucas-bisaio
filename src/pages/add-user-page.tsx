@@ -72,21 +72,21 @@ export function AddUser(props: PageProps<void>) {
         <Title>Add a New User</Title>
         <Forms
           title="Name"
-          onChangeText={(value) => (name.current = value)}
+          handleChangeText={(value) => (name.current = value)}
           validateField={validateName}
           readyToValidate={buttonClicked}
           message="Is not a valid Name"
         />
         <Forms
           title="E-mail"
-          onChangeText={(value) => (email.current = value)}
+          handleChangeText={(value) => (email.current = value)}
           validateField={validateEmail}
           readyToValidate={buttonClicked}
           message="Is not a valid E-mail"
         />
         <Forms
           title="Password"
-          onChangeText={(value) => (password.current = value)}
+          handleChangeText={(value) => (password.current = value)}
           validateField={validatePassword}
           secureTextEntry={true}
           readyToValidate={buttonClicked}
@@ -94,14 +94,14 @@ export function AddUser(props: PageProps<void>) {
         />
         <Forms
           title="Birth Date"
-          onChangeText={(value) => (birthDate.current = value)}
+          handleChangeText={(value) => (birthDate.current = value)}
           validateField={validateBirthDate}
           readyToValidate={buttonClicked}
           message="The correct format is YYYY-MM-DD. And have to be a past date."
         />
         <Forms
           title="Phone Number"
-          onChangeText={(value) => (phone.current = value)}
+          handleChangeText={(value) => (phone.current = value)}
           validateField={validatePhone}
           readyToValidate={buttonClicked}
           message="Phone is not valid. The correct format is 99999999"
