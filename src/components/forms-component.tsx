@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+import {InputState} from '../pages/login-page';
 import {
   Label,
   Caption,
@@ -7,26 +8,36 @@ import {
 } from '../styled-components/text-component';
 import {Input} from '../styled-components/text-input-component';
 
-interface FormProps {
+interface FormProps<T> {
   title: string;
-  onChangeText: (text: string) => string;
+  message: string;
+  readyToValidate: boolean;
+  onChangeText: (value: T) => T;
   validateField: (text: string) => boolean;
   secureTextEntry?: boolean;
-  readyToValidate: boolean;
-  message: string;
 }
 
-export const Forms: React.FC<FormProps> = (props) => {
-  const [value, setValue] = useState('');
+export const Forms: React.FC<FormProps<InputState>> = (props) => {
+  const {validateField, readyToValidate} = props;
+  const value = useRef('');
   const [correctInput, setCorrectInput] = useState(true);
 
   useEffect(() => {
-    if (props.readyToValidate) {
-      setCorrectInput(props.validateField(value));
-      console.log(value, correctInput, props.validateField(value));
+    if (readyToValidate) {
+      setCorrectInput(validateField(value.current));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value, props.readyToValidate]);
+  }, [validateField, readyToValidate]);
+
+  function handleSubmit(text: string) {
+    value.current = text;
+    if (readyToValidate) {
+      setCorrectInput(validateField(value.current));
+    }
+    props.onChangeText({
+      text: value.current,
+      isValid: validateField(value.current),
+    });
+  }
 
   return (
     <>
@@ -36,8 +47,7 @@ export const Forms: React.FC<FormProps> = (props) => {
       <Input
         color={correctInput ? themeColor : colorError}
         onChangeText={(text) => {
-          setValue(text);
-          props.onChangeText(text);
+          handleSubmit(text);
         }}
         autoCapitalize="none"
         secureTextEntry={props.secureTextEntry || false}

@@ -22,16 +22,20 @@ export interface PageProps<T> {
   rootTag: number;
   param?: T;
 }
+export interface InputState {
+  text: string;
+  isValid: boolean;
+}
 
 const LoginPage = (props: PageProps<void>) => {
-  const email = useRef<string>('');
-  const password = useRef<string>('');
+  const email = useRef<InputState>({text: '', isValid: false});
+  const password = useRef<InputState>({text: '', isValid: false});
   const [buttonClicked, setButtonClicked] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   function handleSubmit() {
     setButtonClicked(true);
-    if (validateEmail(email.current) && validatePassword(password.current)) {
+    if (email.current.isValid && password.current.isValid) {
       handleLogin();
     }
   }
@@ -39,7 +43,7 @@ const LoginPage = (props: PageProps<void>) => {
   async function handleLogin() {
     setLoading(true);
     try {
-      await requestLoginAccess(email.current, password.current);
+      await requestLoginAccess(email.current.text, password.current.text);
       goToHome();
     } catch (e) {
       Alert.alert('Something is wrong - ' + e);
@@ -71,14 +75,14 @@ const LoginPage = (props: PageProps<void>) => {
       <View style={styles.viewLogin}>
         <Forms
           title="Email"
-          onChangeText={(text) => (email.current = text)}
+          onChangeText={(value: InputState) => (email.current = value)}
           validateField={validateEmail}
           readyToValidate={buttonClicked}
           message="Email not valid"
         />
         <Forms
           title="Password"
-          onChangeText={(text) => (password.current = text)}
+          onChangeText={(value: InputState) => (password.current = value)}
           secureTextEntry={true}
           validateField={validatePassword}
           readyToValidate={buttonClicked}

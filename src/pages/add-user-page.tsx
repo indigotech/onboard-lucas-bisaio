@@ -14,17 +14,18 @@ import {NewUser, mutationCreateNewUser, User} from '../service/users-requests';
 import {ApolloError, useMutation} from '@apollo/client';
 import {Navigation} from 'react-native-navigation';
 import {PageProps} from './login-page';
+import {InputState} from './login-page';
 
 import {Title} from '../styled-components/text-component';
 import {ButtonConfirm} from '../components/button-component';
 import {Forms} from '../components/forms-component';
 
 export function AddUser(props: PageProps<void>) {
-  const name = useRef<string>('');
-  const email = useRef<string>('');
-  const birthDate = useRef<string>('');
-  const phone = useRef<string>('');
-  const password = useRef<string>('');
+  const name = useRef<InputState>({text: '', isValid: false});
+  const email = useRef<InputState>({text: '', isValid: false});
+  const birthDate = useRef<InputState>({text: '', isValid: false});
+  const phone = useRef<InputState>({text: '', isValid: false});
+  const password = useRef<InputState>({text: '', isValid: false});
   const [buttonClicked, setButtonClicked] = useState(false);
 
   const [addUserRequest, {loading}] = useMutation<NewUser, {data: User}>(
@@ -39,18 +40,18 @@ export function AddUser(props: PageProps<void>) {
   function handleSubmit() {
     setButtonClicked(true);
     if (
-      validateName(name.current) &&
-      validateEmail(email.current) &&
-      validatePassword(password.current) &&
-      validateBirthDate(birthDate.current) &&
-      validatePhone(phone.current)
+      name.current.isValid &&
+      email.current.isValid &&
+      password.current.isValid &&
+      birthDate.current.isValid &&
+      phone.current.isValid
     ) {
       const newUserInfo: NewUser = {
-        email: email.current,
-        name: name.current,
-        birthDate: birthDate.current,
-        phone: phone.current,
-        password: password.current,
+        email: email.current.text,
+        name: name.current.text,
+        birthDate: birthDate.current.text,
+        phone: phone.current.text,
+        password: password.current.text,
         role: 'user',
       };
       createNewUserRequest(newUserInfo);
@@ -71,21 +72,21 @@ export function AddUser(props: PageProps<void>) {
         <Title>Add a New User</Title>
         <Forms
           title="Name"
-          onChangeText={(text) => (name.current = text)}
+          onChangeText={(value) => (name.current = value)}
           validateField={validateName}
           readyToValidate={buttonClicked}
           message="Is not a valid Name"
         />
         <Forms
           title="E-mail"
-          onChangeText={(text) => (email.current = text)}
+          onChangeText={(value) => (email.current = value)}
           validateField={validateEmail}
           readyToValidate={buttonClicked}
           message="Is not a valid E-mail"
         />
         <Forms
           title="Password"
-          onChangeText={(text) => (password.current = text)}
+          onChangeText={(value) => (password.current = value)}
           validateField={validatePassword}
           secureTextEntry={true}
           readyToValidate={buttonClicked}
@@ -93,14 +94,14 @@ export function AddUser(props: PageProps<void>) {
         />
         <Forms
           title="Birth Date"
-          onChangeText={(text) => (birthDate.current = text)}
+          onChangeText={(value) => (birthDate.current = value)}
           validateField={validateBirthDate}
           readyToValidate={buttonClicked}
           message="The correct format is YYYY-MM-DD. And have to be a past date."
         />
         <Forms
           title="Phone Number"
-          onChangeText={(text) => (phone.current = text)}
+          onChangeText={(value) => (phone.current = value)}
           validateField={validatePhone}
           readyToValidate={buttonClicked}
           message="Phone is not valid. The correct format is 99999999"
